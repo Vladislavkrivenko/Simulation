@@ -11,12 +11,15 @@ import animals.Predator;
  *  выход животных за карту
  *  входные даные
  */
-/*public class Validation extends Creature {
-	public Validation(String typeOfAnimal, int animalHealthLevel, int animalAttackPower, int animalSpeed) {
-		super(typeOfAnimal, animalHealthLevel, animalAttackPower, animalSpeed);
+public class Validation {
+	
+	Predator predator;
+	Herbivore herbivore;
+
+	
+	public void healthCheck(int damage) {
 
 	}
-
 	/*
 	 * Entity entity; Creature animal; Herbivore rabbit; Predator wolf;
 	 * 
@@ -49,6 +52,7 @@ import animals.Predator;
 	 * @Override public void makeAttack() { isMakeAttackWolf(rabbit, wolf, entity);
 	 * isMakeAttackRabbit(rabbit, wolf, entity);
 	 * 
-	  }
-	 
-}*/
+	 * }
+	 */
+
+}

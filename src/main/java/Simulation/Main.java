@@ -2,7 +2,7 @@ package Simulation;
 
 import animals.Creature;
 import animals.Herbivore;
-import createMap.Map;
+import createMap.GameMap;
 import createMap.RenderMap;
 
 /**
@@ -10,19 +10,12 @@ import createMap.RenderMap;
  *
  */
 public class Main {
-	
-	public static void main(String[] args) {
-		Map map = new Map(); 
-		map.setStartAnimalPosition();
-		RenderMap render = new RenderMap();
-		try {
-			render.renderMap(map);
-		} catch (Exception e) {
-	
-			e.printStackTrace();
-		}
-		
-	int x = 123;	
 
+	public static void main(String[] args) {
+		GameMap game = new GameMap(15, 50);
+		game.IFillTheMapWithObjects();
+
+		RenderMap render = new RenderMap();
+		render.renderMap(game.getSimulationMap());
 	}
 }

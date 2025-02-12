@@ -1,8 +1,11 @@
 package animals;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import createMap.Coordinates;
-import createMap.Map;
-import objects.ColorObject;
+import createMap.GameMap;
 
 public class Predator extends Creature {
 
@@ -11,9 +14,12 @@ public class Predator extends Creature {
 
 	}
 
-	public Predator(Coordinates coordinates, ColorObject color) {
-		super(coordinates, color);
+	public Predator(Coordinates coordinates) {
+		super(coordinates);
 
+	}
+
+	public Predator() {
 	}
 
 	@Override
@@ -28,16 +34,21 @@ public class Predator extends Creature {
 	}
 
 	@Override
-	public void makeMove(Map map) {
+	public void makeMove(GameMap map) {
 	}
 
 	@Override
-	public void IMeasureTheAttackRadius(Map map, Herbivore herbivore, Predator predator) {
+	public void IMeasureTheAttackRadius(GameMap map, Herbivore herbivore, Predator predator) {
 
 	}
 
 	@Override
 	public void makeAttack(Herbivore herbivore, Predator predator) {
+	}
+
+	@Override
+	protected Set<CoordinatesShift> getAnimalMoves() {
+		return new HashSet<>(Arrays.asList(new CoordinatesShift(1, 2), new CoordinatesShift(2, 2)));
 	}
 
 }

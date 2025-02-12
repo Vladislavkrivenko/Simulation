@@ -1,19 +1,23 @@
 package animals;
 
+import java.util.Set;
+
 import createMap.Coordinates;
-import createMap.Map;
-import objects.ColorObject;
+import createMap.GameMap;
+
 
 public class Herbivore extends Creature {
-
 	public Herbivore(String typeOfAnimal, int animalHealthLevel, int animalAttackPower, int animalSpeed) {
 		super(typeOfAnimal, animalHealthLevel, animalAttackPower, animalSpeed);
 
 	}
 
-	public Herbivore(Coordinates coordinates, ColorObject color) {
-		super(coordinates, color);
+	public Herbivore(Coordinates coordinates) {
+		super(coordinates);
 
+	}
+
+	public Herbivore() {
 	}
 
 	@Override
@@ -28,17 +32,22 @@ public class Herbivore extends Creature {
 	}
 
 	@Override
-	public void makeMove(Map map) {
+	public void makeMove(GameMap map) {
 	}
 
 	@Override
-	public void IMeasureTheAttackRadius(Map map, Herbivore herbivore, Predator predator) {
+	public void IMeasureTheAttackRadius(GameMap map, Herbivore herbivore, Predator predator) {
 
 	}
 
 	@Override
 	public void makeAttack(Herbivore herbivore, Predator predator) {
 
+	}
+
+	@Override
+	protected Set<CoordinatesShift> getAnimalMoves() {
+		return null;
 	}
 
 }
