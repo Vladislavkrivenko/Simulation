@@ -1,53 +1,49 @@
 package animals;
 
-import java.util.Set;
-
 import createMap.Coordinates;
-import createMap.GameMap;
+import createMap.SimulationMap;
+import interf.EntityImage;
+
+public class Herbivore extends Creature implements EntityImage {
+
+    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalHealthLevel, int animalAttackPower, int animalSpeed) {
+        super(coordinates, typeOfAnimal, animalHealthLevel, animalAttackPower, animalSpeed);
+//        System.out.println("Створено заєць на клітинці: " + coordinates);
+    }
+
+//	public Herbivore(Coordinates coordinates) {
+//		super(coordinates);
+//
+//	}
 
 
-public class Herbivore extends Creature {
-	public Herbivore(String typeOfAnimal, int animalHealthLevel, int animalAttackPower, int animalSpeed) {
-		super(typeOfAnimal, animalHealthLevel, animalAttackPower, animalSpeed);
+    @Override
+    public void setPosition(Coordinates newPosition) {
+        super.setPosition(newPosition);
+    }
 
-	}
+    public Coordinates getHerbivorePosition() {
+        return getCoordinates();
+    }
 
-	public Herbivore(Coordinates coordinates) {
-		super(coordinates);
+    @Override
+    public void createAnimal() {
+        createHerbivore();
 
-	}
+    }
 
-	public Herbivore() {
-	}
+    private void createHerbivore() {
+        new Herbivore(getCoordinates(), "Rabbit", 100, 50, 2);
+    }
 
-	@Override
-	public void createAnimal() {
-		createHerbivore();
 
-	}
+    @Override
+    public void makeAttack(SimulationMap map, Entity entity) {
+    }
 
-	private Herbivore createHerbivore() {
-		Herbivore herbivore = new Herbivore("Rabbit", 100, 25, 100);
-		return herbivore;
-	}
 
-	@Override
-	public void makeMove(GameMap map) {
-	}
-
-	@Override
-	public void IMeasureTheAttackRadius(GameMap map, Herbivore herbivore, Predator predator) {
-
-	}
-
-	@Override
-	public void makeAttack(Herbivore herbivore, Predator predator) {
-
-	}
-
-	@Override
-	protected Set<CoordinatesShift> getAnimalMoves() {
-		return null;
-	}
-
+    @Override
+    public String getSprite() {
+        return "🐰";
+    }
 }

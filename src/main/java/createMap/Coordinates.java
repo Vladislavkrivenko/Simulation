@@ -2,11 +2,17 @@ package createMap;
 
 import java.util.Objects;
 
-import animals.CoordinatesShift;
-
 public class Coordinates {
     private final Integer horizontal;
     private final Integer vertical;
+
+    public Integer getHorizontal() {
+        return horizontal;
+    }
+
+    public Integer getVertical() {
+        return vertical;
+    }
 
     public Coordinates(int horizontal, int vertical) {
         super();
@@ -14,14 +20,10 @@ public class Coordinates {
         this.vertical = vertical;
     }
 
-    public Coordinates ShiftAnimal(CoordinatesShift shift) {
-        return new Coordinates(this.horizontal + shift.horizontShift, this.vertical + shift.verticalShift);
-    }
+    public boolean possibleMovementsOfTheAnimal(int mapWidth, int mapHeight) {
 
-    public boolean possibleMovementsOfTheAnimal(CoordinatesShift shift, int mapWidth, int mapHeight) {
-        int h = horizontal + shift.horizontShift;
-        int v = vertical + shift.verticalShift;
-
+        int h = getHorizontal();
+        int v = getVertical();
         if ((h < 0) || (h >= mapWidth))
             return false;
         if ((v < 0) || (v >= mapHeight))
