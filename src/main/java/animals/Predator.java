@@ -1,21 +1,16 @@
 package animals;
 
 import createMap.Coordinates;
-import createMap.SimulationMap;
 import interf.EntityImage;
 
 public class Predator extends Creature implements EntityImage {
+    private static final int ANIMAL_SPEED = 2;
 
-
-    public Predator(Coordinates coordinates, String typeOfAnimal, int animalHealthLevel, int animalAttackPower, int animalSpeed) {
-        super(coordinates, typeOfAnimal, animalHealthLevel, animalAttackPower, animalSpeed);
+    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
+        super(coordinates, typeOfAnimal, animalSpeed);
 
     }
 
-//	public Predator(Coordinates coordinates) {
-//		super(coordinates);
-//
-//	}
 
     @Override
     public void setPosition(Coordinates newPosition) {
@@ -23,7 +18,7 @@ public class Predator extends Creature implements EntityImage {
     }
 
     public Coordinates getPredatorPosition() {
-        return super.getPredatorPosition();
+        return this.getPredatorPosition();
     }
 
     @Override
@@ -33,11 +28,7 @@ public class Predator extends Creature implements EntityImage {
     }
 
     private void createPredator() {
-        new Predator(getCoordinates(), "Wolf", 100, 50, 2);
-    }
-
-    @Override
-    public void makeAttack(SimulationMap map, Entity entity) {
+        new Predator(getCoordinates(), "Wolf", ANIMAL_SPEED);
     }
 
 

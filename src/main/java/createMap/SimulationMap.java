@@ -11,7 +11,6 @@ import java.util.Random;
 public class SimulationMap {
     private final int totalRows;
     private final int totalColumns;
-    Coordinates coordinates;
     private final HashMap<Coordinates, Entity> locationOfObject = new HashMap<>();//хеш мап который содержит соординаты и обьекты
     private final HashSet<Coordinates> occupiedCells = new HashSet<>();//хеш мапа содержит занятые клетки
 
@@ -21,7 +20,6 @@ public class SimulationMap {
         this.totalColumns = totalColumns;
 
     }
-
 
     public int getTotalRows() {
         return totalRows;
@@ -35,13 +33,9 @@ public class SimulationMap {
         entity.setCoordinates(coordinates);
         locationOfObject.put(coordinates, entity);
         occupiedCells.add(coordinates);
-
-
-
     }
 
     public boolean isSquareEmpty(Coordinates coordinates) {
-        boolean b = coordinates.possibleMovementsOfTheAnimal(getTotalColumns(), getTotalRows());
         return !locationOfObject.containsKey(coordinates);
     }
 
@@ -50,13 +44,12 @@ public class SimulationMap {
     }
 
     public void removeObject(Coordinates coordinates, Entity entity) {
-        if (locationOfObject.get(coordinates) == entity) {
+        if (locationOfObject.containsKey(coordinates) && locationOfObject.get(coordinates) == entity) {
             locationOfObject.remove(coordinates);
-            occupiedCells.remove(coordinates);
-            System.out.println("Об'єкт " + entity.getClass().getSimpleName() + " видалено з клітинки: " + coordinates);
+            System.out.println("❌ объект удален " + entity.getClass().getSimpleName() + " с " + coordinates);
+        } else {
+            System.out.println("⚠️ Не удалось удалить " + entity.getClass().getSimpleName() + " с " + coordinates);
         }
-
-
     }
 
     public Coordinates getRandomCell() {

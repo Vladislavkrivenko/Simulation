@@ -5,60 +5,81 @@ import java.util.*;
 import createMap.Coordinates;
 import createMap.GameMap;
 import createMap.SimulationMap;
-import objects.Grass;
+
 
 public abstract class Creature extends Entity {
     protected String typeOfAnimal;
-    protected int animalHealthLevel;
-    public int attackPowerOfAnimal;
     protected int animalSpeed;
 
-//	public Creature(Coordinates coordinates) {
-//		super(coordinates);
-//
-//	}
-
-    public Creature(Coordinates coordinates, String typeOfAnimal, int animalHealthLevel, int animalAttackPower, int animalSpeed) {
+    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
         super(coordinates);
         this.typeOfAnimal = typeOfAnimal;
-        this.animalHealthLevel = animalHealthLevel;
-        this.attackPowerOfAnimal = animalAttackPower;
         this.animalSpeed = animalSpeed;
     }
-
 
     public void makeMove(GameMap map) {
         while (true) {
             Coordinates rabbitPosition = findNearestRabbit(map, this.getCoordinates());
-
             if (rabbitPosition == null) {
-                System.out.println("Woln dont find rabbit");
+                System.out.println("Волк не нашел зайца");
+                moveRandomly(map);
                 break;
             }
-            System.out.println("Найближчий заєць: " + rabbitPosition);
+
             List<Coordinates> path = bfs(map, this.getCoordinates(), rabbitPosition);
             if (path.size() > 1) {
                 Coordinates oldPosition = this.getCoordinates();
                 Coordinates newPosition = path.get(1);
 
                 this.setPosition(newPosition);
-                map.getSimulationMap().removeObject(oldPosition, this);  // Видаляємо з попередньої позиції
-                map.getSimulationMap().setObject(newPosition, this);     // Додаємо на нову позицію
+                map.getSimulationMap().removeObject(oldPosition, this);
+                System.out.println("❌ Удалено с " + oldPosition + ": " + map.getSimulationMap().getObject(oldPosition));// Видаляємо з попередньої позиції
+                map.getSimulationMap().setObject(newPosition, this);
+                System.out.println("✅ Добавлен на " + newPosition + ": " + map.getSimulationMap().getObject(newPosition));// Додаємо на нову позицію
 
                 Entity entity = map.getSimulationMap().getObject(newPosition);
                 if (entity instanceof Herbivore) {
+                    System.out.println("🔥 Волк ест зайца " + newPosition);
                     makeAttack(map.getSimulationMap(), entity);
                 }
             } else {
-                System.out.println("Немає можливого руху для " + this.typeOfAnimal);
+                System.out.println("Нету возможного движения для " + this.typeOfAnimal);
                 break;
             }
 
         }
     }
 
+    private void moveRandomly(GameMap map) {
+        Random random = new Random();
+        List<Coordinates> possibleMoves = new ArrayList<>();
+        for (int rows = -animalSpeed; rows <= animalSpeed; rows++) {
+            for (int colum = -animalSpeed; colum <= animalSpeed; colum++) {
+                if (rows == 0 && colum == 0) continue;
+
+                Coordinates newCoords = new Coordinates(
+                        this.getCoordinates().getHorizontal() + rows,
+                        this.getCoordinates().getVertical() + colum
+                );
+
+                if (map.isWalkable(newCoords)) {
+                    possibleMoves.add(newCoords);
+                }
+            }
+        }
+        if (!possibleMoves.isEmpty()) {
+            Coordinates newPosition = possibleMoves.get(random.nextInt(possibleMoves.size()));
+
+            Coordinates oldPosition = this.getCoordinates();
+            this.setPosition(newPosition);
+            map.getSimulationMap().removeObject(oldPosition, this);
+            map.getSimulationMap().setObject(newPosition, this);
+        } else {
+
+        }
+    }
+
     public List<Coordinates> bfs(GameMap map, Coordinates start, Coordinates target) {
-        System.out.println("Шукаємо шлях від " + start + " до " + target);
         Queue<Coordinates> queue = new LinkedList<>();
         Map<Coordinates, Coordinates> cameFrom = new HashMap<>();
         Set<Coordinates> visited = new HashSet<>();
@@ -69,12 +90,12 @@ public abstract class Creature extends Entity {
         while (!queue.isEmpty()) {
             Coordinates current = queue.poll();
 
-            // Если достигли цели, восстанавливаем путь
+
             if (current.equals(target)) {
                 return reconstructPath(cameFrom, start, target);
             }
 
-            // Обрабатываем соседние клетки
+
             for (Coordinates neighbor : map.getNeighbors(current)) {
                 if (!visited.contains(neighbor) && map.isWalkable(neighbor)) {
                     queue.add(neighbor);
@@ -110,10 +131,8 @@ public abstract class Creature extends Entity {
 
         while (!queue.isEmpty()) {
             Coordinates current = queue.poll();
-
-            // Если на текущей клетке есть заяц
             if (!current.equals(predatorPosition) && map.isRabbitAt(current)) {
-                return current; // Знайшли зайця
+                return current;
             }
 
             // Добавляем соседние клетки в очередь
@@ -128,7 +147,6 @@ public abstract class Creature extends Entity {
         return null; // Если зайца не нашли
     }
 
-
     public abstract void createAnimal();
 
     public void setPosition(Coordinates newPosition) {
@@ -137,14 +155,9 @@ public abstract class Creature extends Entity {
 
     }
 
-    public Coordinates getPredatorPosition() {
-        return getCoordinates();
-    }
-
-    public void makeAttack(SimulationMap map, Entity entity) {
-        if (entity instanceof Predator && entity instanceof Herbivore) {
+    private void makeAttack(SimulationMap map, Entity entity) {
+        if (entity instanceof Herbivore) {
             map.removeObject(entity.getCoordinates(), entity);
-            System.out.println(this.typeOfAnimal + " з'їв " + entity.getClass().getSimpleName() + " на клітинці " + entity.getCoordinates());
         }
     }
 

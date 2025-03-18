@@ -34,18 +34,11 @@ public class Main {
         for (Creature creature : animal) {
 
             if (game.getSimulationMap().getLocationOfObject().containsValue(creature)) {
-                System.out.println("Тварина рухається: " + creature.getClass().getSimpleName() + " на позиції " + creature.getCoordinates());
                 creature.makeMove(game);
-
             }
             render.renderMap(game.getSimulationMap());
         }
-
-
         render.renderMap(game.getSimulationMap());
-
-        //	Iterator iterator =  gam.iterator();
-
         int num = 123;
     }
 
