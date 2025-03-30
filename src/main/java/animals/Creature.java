@@ -1,46 +1,63 @@
 package animals;
 
-import java.util.*;
+import mapManager.Coordinates;
+import mapManager.EntityManager;
+import moveAnimal.FindsTarget;
+import moveAnimal.SearchAlgorithm;
 
-import createMap.Coordinates;
-import createMap.GameMap;
-import createMap.SimulationMap;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class Creature extends Entity {
     protected String typeOfAnimal;
     protected int animalSpeed;
+    private final SearchAlgorithm moveAnimals;
+    private final FindsTarget findsTarget;
+    EntityManager entityManager;
+    protected Class<? extends Entity> victim;
 
-    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
+    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim) {
         super(coordinates);
         this.typeOfAnimal = typeOfAnimal;
         this.animalSpeed = animalSpeed;
+        this.moveAnimals = new SearchAlgorithm();
+        this.findsTarget = new FindsTarget();
+        this.victim = victim;
+
     }
 
-    public void makeMove(GameMap map) {
+    public abstract void createAnimal();
+
+    public void makeMove(EntityManager entityManager, Coordinates start) {//ход животных
+        if (victim == null) {
+            System.out.println("Отсутствует клас жертви для " + this.typeOfAnimal);
+            return;
+        }
         while (true) {
-            Coordinates rabbitPosition = findNearestRabbit(map, this.getCoordinates());
-            if (rabbitPosition == null) {
+            List<Coordinates> targetPosition = findsTarget.findNearestFood(entityManager, this.getCoordinates(), victim);
+            if (targetPosition == null || targetPosition.isEmpty()) {
                 System.out.println("Волк не нашел зайца");
-                moveRandomly(map);
+                moveRandomly(entityManager);
                 break;
             }
 
-            List<Coordinates> path = bfs(map, this.getCoordinates(), rabbitPosition);
+            List<Coordinates> path = moveAnimals.getBfs(entityManager, this.getCoordinates());
             if (path.size() > 1) {
                 Coordinates oldPosition = this.getCoordinates();
                 Coordinates newPosition = path.get(1);
 
                 this.setPosition(newPosition);
-                map.getSimulationMap().removeObject(oldPosition, this);
-                System.out.println("❌ Удалено с " + oldPosition + ": " + map.getSimulationMap().getObject(oldPosition));// Видаляємо з попередньої позиції
-                map.getSimulationMap().setObject(newPosition, this);
-                System.out.println("✅ Добавлен на " + newPosition + ": " + map.getSimulationMap().getObject(newPosition));// Додаємо на нову позицію
+                entityManager.removeObject(oldPosition, this);
+                System.out.println("Удалено с " + oldPosition + ": " + entityManager.getEntity(oldPosition));
+                entityManager.setEntity(newPosition, this);
+                System.out
+                        .println("Добавлен на " + newPosition + ": " + entityManager.getEntity(newPosition));
 
-                Entity entity = map.getSimulationMap().getObject(newPosition);
-                if (entity instanceof Herbivore) {
+                Entity entity = entityManager.getEntity(newPosition);
+                if (victim.isInstance(entity)) {
                     System.out.println("🔥 Волк ест зайца " + newPosition);
-                    makeAttack(map.getSimulationMap(), entity);
+                    eatVictim(entityManager, victim.cast(entity));
                 }
             } else {
                 System.out.println("Нету возможного движения для " + this.typeOfAnimal);
@@ -50,19 +67,18 @@ public abstract class Creature extends Entity {
         }
     }
 
-    private void moveRandomly(GameMap map) {
+    private void moveRandomly(EntityManager map) {//рандомный ход
         Random random = new Random();
         List<Coordinates> possibleMoves = new ArrayList<>();
         for (int rows = -animalSpeed; rows <= animalSpeed; rows++) {
             for (int colum = -animalSpeed; colum <= animalSpeed; colum++) {
-                if (rows == 0 && colum == 0) continue;
+                if (rows == 0 && colum == 0)
+                    continue;
 
-                Coordinates newCoords = new Coordinates(
-                        this.getCoordinates().getHorizontal() + rows,
-                        this.getCoordinates().getVertical() + colum
-                );
+                Coordinates newCoords = new Coordinates(this.getCoordinates().getMapWidth() + rows,
+                        this.getCoordinates().getMapHeight() + colum);
 
-                if (map.isWalkable(newCoords)) {
+                if (entityManager.isInsideMapBorder(newCoords) && entityManager.isSquareEmpty(newCoords)) {
                     possibleMoves.add(newCoords);
                 }
             }
@@ -72,94 +88,26 @@ public abstract class Creature extends Entity {
 
             Coordinates oldPosition = this.getCoordinates();
             this.setPosition(newPosition);
-            map.getSimulationMap().removeObject(oldPosition, this);
-            map.getSimulationMap().setObject(newPosition, this);
-        } else {
+            entityManager.removeObject(oldPosition, this);
+            entityManager.setEntity(newPosition, this);
 
         }
     }
-
-    public List<Coordinates> bfs(GameMap map, Coordinates start, Coordinates target) {
-        Queue<Coordinates> queue = new LinkedList<>();
-        Map<Coordinates, Coordinates> cameFrom = new HashMap<>();
-        Set<Coordinates> visited = new HashSet<>();
-
-        queue.add(start);
-        visited.add(start);
-
-        while (!queue.isEmpty()) {
-            Coordinates current = queue.poll();
-
-
-            if (current.equals(target)) {
-                return reconstructPath(cameFrom, start, target);
-            }
-
-
-            for (Coordinates neighbor : map.getNeighbors(current)) {
-                if (!visited.contains(neighbor) && map.isWalkable(neighbor)) {
-                    queue.add(neighbor);
-                    visited.add(neighbor);
-                    cameFrom.put(neighbor, current);
-                }
-            }
-        }
-
-        return Collections.emptyList(); // Если пути нет
-    }
-
-
-    private List<Coordinates> reconstructPath(Map<Coordinates, Coordinates> cameFrom, Coordinates start, Coordinates target) {
-        List<Coordinates> path = new LinkedList<>();
-        Coordinates current = target;
-
-        while (!current.equals(start)) {
-            path.add(0, current);
-            current = cameFrom.get(current);
-        }
-
-        path.add(0, start); // Добавляем стартовую позицию
-        return path;
-    }
-
-    private Coordinates findNearestRabbit(GameMap map, Coordinates predatorPosition) {
-        Queue<Coordinates> queue = new LinkedList<>();
-        Set<Coordinates> visited = new HashSet<>();
-
-        queue.add(predatorPosition);
-        visited.add(predatorPosition);
-
-        while (!queue.isEmpty()) {
-            Coordinates current = queue.poll();
-            if (!current.equals(predatorPosition) && map.isRabbitAt(current)) {
-                return current;
-            }
-
-            // Добавляем соседние клетки в очередь
-            for (Coordinates neighbor : map.getNeighbors(current)) {
-                if (!visited.contains(neighbor) && map.isWalkable(neighbor)) {
-                    queue.add(neighbor);
-                    visited.add(neighbor);
-                }
-            }
-        }
-
-        return null; // Если зайца не нашли
-    }
-
-    public abstract void createAnimal();
 
     public void setPosition(Coordinates newPosition) {
+        if (newPosition == null) {
+            throw new IllegalArgumentException("New position cannot be null");
+        }
         super.setCoordinates(newPosition);
 
-
     }
 
-    private void makeAttack(SimulationMap map, Entity entity) {
-        if (entity instanceof Herbivore) {
-            map.removeObject(entity.getCoordinates(), entity);
+    private void eatVictim(EntityManager entityManager, Entity entity) {//поедания жертвы
+        if (!findsTarget.isFood(getCoordinates())) {
+            System.out.println("This object is not food.");
+        } else {
+            entityManager.removeObject(entity.getCoordinates(), entity);
         }
     }
-
 
 }

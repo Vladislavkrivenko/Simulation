@@ -1,12 +1,12 @@
 package objects;
 
 import animals.Entity;
-import createMap.Coordinates;
+import mapManager.Coordinates;
 import interf.EntityImage;
 
 
 public class Grass extends Entity implements EntityImage {
-    public Grass(Coordinates coordinates, int h) {
+    public Grass(Coordinates coordinates, int health) {
         super(coordinates);
     }
 

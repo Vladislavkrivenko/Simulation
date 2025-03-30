@@ -1,24 +1,24 @@
-package createMap;
+package mapManager;
 
 import animals.Entity;
 import interf.EntityImage;
 
-public class RenderMap {
+public class DrawMap {
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String EMPTY_SPRITE = "\033[38;5;94m";//
     public static final String SQUARE_UNICODE = "🏿";
 
-    public void renderMap(SimulationMap map) {
-        for (int colum = 0; colum < map.getTotalRows(); colum++) {
+    public void drawingMap(EntityManager entityManager) {//отрисовка карты
+        for (int colum = 0; colum < entityManager.getTotalColumns(); colum++) {
             StringBuilder line = new StringBuilder();
-            for (int rows = 0; rows < map.getTotalColumns(); rows++) {
+            for (int rows = 0; rows < entityManager.getTotalRows(); rows++) {
                 Coordinates coordinates = new Coordinates(colum, rows);
-                if (map.isSquareEmpty(coordinates)) {
+                if (entityManager.isSquareEmpty(coordinates)) {
                     line.append(getSpriteForEmptySquare(coordinates));
 
                 } else {
-                    line.append(getEntitySprite(map.getObject(coordinates)));
+                    line.append(getEntitySprite(entityManager.getEntity(coordinates)));
                 }
 
             }

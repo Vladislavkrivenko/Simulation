@@ -1,10 +1,10 @@
 package animals;
 
-import createMap.Coordinates;
+import mapManager.Coordinates;
 import interf.EntityImage;
 
 
-public abstract class Entity  implements EntityImage {
+public abstract class Entity implements EntityImage {
     private Coordinates coordinates;
 
     public Entity(Coordinates coordinates) {
@@ -18,6 +18,7 @@ public abstract class Entity  implements EntityImage {
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
+
     @Override
     public String getSprite() {
         return "";

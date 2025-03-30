@@ -1,12 +1,12 @@
 package animals;
 
-import createMap.Coordinates;
-import interf.EntityImage;
+import mapManager.Coordinates;
+import objects.Grass;
 
-public class Herbivore extends Creature implements EntityImage {
+public class Herbivore extends Creature {
 
     public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
-        super(coordinates, typeOfAnimal, animalSpeed);
+        super(coordinates, "Rabbit", 2, Grass.class);
     }
 
     @Override
@@ -16,6 +16,11 @@ public class Herbivore extends Creature implements EntityImage {
 
     public Coordinates getHerbivorePosition() {
         return getCoordinates();
+    }
+
+    @Override
+    public String getSprite() {
+        return "🐰";
     }
 
     @Override
@@ -29,9 +34,4 @@ public class Herbivore extends Creature implements EntityImage {
         new Herbivore(getCoordinates(), "Rabbit", 2);
     }
 
-
-    @Override
-    public String getSprite() {
-        return "🐰";
-    }
 }

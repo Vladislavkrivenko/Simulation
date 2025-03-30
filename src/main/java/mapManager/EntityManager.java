@@ -1,20 +1,18 @@
-package createMap;
+package mapManager;
 
 import animals.Entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 
-public class SimulationMap {
+
+public class EntityManager {
     private final int totalRows;
     private final int totalColumns;
     private final HashMap<Coordinates, Entity> locationOfObject = new HashMap<>();//хеш мап который содержит соординаты и обьекты
     private final HashSet<Coordinates> occupiedCells = new HashSet<>();//хеш мапа содержит занятые клетки
 
-    public SimulationMap(int totalRows, int totalColumns) {
+    public EntityManager(int totalRows, int totalColumns) {
         super();
         this.totalRows = totalRows;
         this.totalColumns = totalColumns;
@@ -29,7 +27,7 @@ public class SimulationMap {
         return totalColumns;
     }
 
-    public void setObject(Coordinates coordinates, Entity entity) {
+    public void setEntity(Coordinates coordinates, Entity entity) {
         entity.setCoordinates(coordinates);
         locationOfObject.put(coordinates, entity);
         occupiedCells.add(coordinates);
@@ -39,7 +37,7 @@ public class SimulationMap {
         return !locationOfObject.containsKey(coordinates);
     }
 
-    public Entity getObject(Coordinates coordinates) {
+    public Entity getEntity(Coordinates coordinates) {
         return locationOfObject.get(coordinates);
     }
 
@@ -52,29 +50,6 @@ public class SimulationMap {
         }
     }
 
-    public Coordinates getRandomCell() {
-
-        Random random = new Random();
-
-        List<Coordinates> emptyCell = new ArrayList<>();
-
-        for (int i = 0; i < getTotalRows(); i++) {
-            for (int j = 0; j < getTotalColumns(); j++) {
-                Coordinates coordinates = new Coordinates(i, j);
-
-                if (!occupiedCells.contains(coordinates)) {
-                    emptyCell.add(coordinates);
-                }
-            }
-        }
-
-        if (emptyCell.isEmpty()) {
-            return null;
-        }
-
-        return emptyCell.get(random.nextInt(emptyCell.size()));
-
-    }
 
     public HashSet<Coordinates> getOccupiedCells() {
         return occupiedCells;
@@ -84,4 +59,7 @@ public class SimulationMap {
         return locationOfObject;
     }
 
+    public boolean isInsideMapBorder(Coordinates coordinates) {
+        return coordinates.getMapWidth() < getTotalRows() && coordinates.getMapHeight() < getTotalColumns();
+    }
 }

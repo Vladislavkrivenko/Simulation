@@ -1,13 +1,11 @@
 package animals;
 
-import createMap.Coordinates;
-import interf.EntityImage;
+import mapManager.Coordinates;
 
-public class Predator extends Creature implements EntityImage {
-    private static final int ANIMAL_SPEED = 2;
+public class Predator extends Creature {
 
     public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
-        super(coordinates, typeOfAnimal, animalSpeed);
+        super(coordinates, "Wolf", 2, Herbivore.class);
 
     }
 
@@ -18,7 +16,12 @@ public class Predator extends Creature implements EntityImage {
     }
 
     public Coordinates getPredatorPosition() {
-        return this.getPredatorPosition();
+        return getCoordinates();
+    }
+
+    @Override
+    public String getSprite() {
+        return "🐺";
     }
 
     @Override
@@ -28,12 +31,7 @@ public class Predator extends Creature implements EntityImage {
     }
 
     private void createPredator() {
-        new Predator(getCoordinates(), "Wolf", ANIMAL_SPEED);
+        new Predator(getCoordinates(), "Wolf", 2);
     }
 
-
-    @Override
-    public String getSprite() {
-        return "🐺";
-    }
 }
