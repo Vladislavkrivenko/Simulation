@@ -21,29 +21,12 @@ public class Coordinates {
         this.mapHeight = mapHeight;
     }
 
-    public boolean possibleMovementsOfTheAnimal(int mapWidth, int mapHeight) {
-
-        int w = getMapWidth();
-        int h = getMapHeight();
-        if ((w < 0) || (w >= mapWidth))
-            return false;
-        if ((h < 0) || (h >= mapHeight))
-            return false;
-
-        return true;
-    }
-
-
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Coordinates other = (Coordinates) obj;
-        return mapWidth == other.mapWidth && mapHeight == other.mapHeight;
+        return mapWidth.equals(other.mapWidth) && mapHeight.equals(other.mapHeight);
     }
 
     @Override

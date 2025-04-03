@@ -1,12 +1,13 @@
 package animals;
 
 import mapManager.Coordinates;
+import mapManager.EntityManager;
 import objects.Grass;
 
 public class Herbivore extends Creature {
 
-    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
-        super(coordinates, "Rabbit", 2, Grass.class);
+    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager) {
+        super(coordinates, "Rabbit", 2, Grass.class, entityManager);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class Herbivore extends Creature {
 
 
     private void createHerbivore() {
-        new Herbivore(getCoordinates(), "Rabbit", 2);
+        new Herbivore(getCoordinates(), "Rabbit", 2, entityManager);
     }
 
 }

@@ -6,28 +6,35 @@ import mapManager.EntityManager;
 import java.util.*;
 
 public class SearchAlgorithm {
-    FindsTarget findsTarget;
+    private final FindsTarget findsTarget;
+    private Coordinates targetCoordinates = null;
+    private final Map<Coordinates, Coordinates> cameFrom = new HashMap<>();
+
+    public SearchAlgorithm(FindsTarget findsTarget) {
+        this.findsTarget = findsTarget;
+    }
 
     public List<Coordinates> getBfs(EntityManager entityManager, Coordinates coordinates) {
         return bfs(entityManager, coordinates);
     }
 
     private List<Coordinates> bfs(EntityManager entityManager, Coordinates start) {
+        if (entityManager == null) {
+            throw new IllegalStateException("entityManager is null in SearchAlgorithm.bfs");
+        }
         Queue<Coordinates> queue = new LinkedList<>();//
-        Map<Coordinates, Coordinates> cameFrom = new HashMap<>();//
-        Set<Coordinates> visited = new HashSet<>();//
-        Coordinates targetCoord = null;
-
-        queue.add(start);//
+        Set<Coordinates> visited = new HashSet<>();
+        queue.add(start);
         visited.add(queue.element());
 
-        while (!queue.isEmpty()) {//
+        while (!queue.isEmpty()) {
             visited.add(queue.element());
-            Coordinates current = queue.element();//
+            Coordinates current = queue.poll();
 
             if (!(entityManager.isSquareEmpty(current))
                     && entityManager.getEntity(current).getClass().equals(FindsTarget.victim)) {
-                targetCoord = current;
+                targetCoordinates = current;
+                System.out.println("validation on target");
                 break;
             }
             List<Coordinates> neighbours = findsTarget.getNeighbors(current, entityManager);
@@ -39,13 +46,18 @@ public class SearchAlgorithm {
                 }
             }
         }
-        List<Coordinates> path = new LinkedList<>();
-        while (targetCoord != null) {
-            path.add(targetCoord);
-            targetCoord = cameFrom.get(targetCoord);
-        }
-        Collections.reverse(path);
-        return path;
+
+        return getPath();
     }
 
+    private List<Coordinates> getPath() {
+        List<Coordinates> path = new LinkedList<>();
+        while (targetCoordinates != null) {
+            path.add(targetCoordinates);
+            targetCoordinates = cameFrom.get(targetCoordinates);
+        }
+        Collections.reverse(path);
+        System.out.println("return path");
+        return path;
+    }
 }

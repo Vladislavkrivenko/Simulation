@@ -9,8 +9,8 @@ import java.util.HashSet;
 public class EntityManager {
     private final int totalRows;
     private final int totalColumns;
-    private final HashMap<Coordinates, Entity> locationOfObject = new HashMap<>();//хеш мап который содержит соординаты и обьекты
-    private final HashSet<Coordinates> occupiedCells = new HashSet<>();//хеш мапа содержит занятые клетки
+    private final HashMap<Coordinates, Entity> locationOfObject = new HashMap<>();
+    private final HashSet<Coordinates> occupiedCells = new HashSet<>();
 
     public EntityManager(int totalRows, int totalColumns) {
         super();

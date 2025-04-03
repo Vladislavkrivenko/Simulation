@@ -14,31 +14,34 @@ public abstract class Creature extends Entity {
     protected int animalSpeed;
     private final SearchAlgorithm moveAnimals;
     private final FindsTarget findsTarget;
-    EntityManager entityManager;
     protected Class<? extends Entity> victim;
+    protected EntityManager entityManager;
 
-    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim) {
+    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager) {
         super(coordinates);
         this.typeOfAnimal = typeOfAnimal;
         this.animalSpeed = animalSpeed;
-        this.moveAnimals = new SearchAlgorithm();
-        this.findsTarget = new FindsTarget();
         this.victim = victim;
+        this.entityManager = entityManager;
+        this.findsTarget = new FindsTarget();
+        this.moveAnimals = new SearchAlgorithm(findsTarget);
+        this.findsTarget.setAlgorithm(moveAnimals);
+
 
     }
 
     public abstract void createAnimal();
 
-    public void makeMove(EntityManager entityManager, Coordinates start) {//ход животных
+    public void makeMove() {
         if (victim == null) {
             System.out.println("Отсутствует клас жертви для " + this.typeOfAnimal);
             return;
         }
         while (true) {
-            List<Coordinates> targetPosition = findsTarget.findNearestFood(entityManager, this.getCoordinates(), victim);
+            List<Coordinates> targetPosition = findsTarget.getTargetForFood(entityManager, this.getCoordinates(), victim);
             if (targetPosition == null || targetPosition.isEmpty()) {
-                System.out.println("Волк не нашел зайца");
-                moveRandomly(entityManager);
+                System.out.println("Охотник не нашел жертву");
+                moveRandomly();
                 break;
             }
 
@@ -56,7 +59,7 @@ public abstract class Creature extends Entity {
 
                 Entity entity = entityManager.getEntity(newPosition);
                 if (victim.isInstance(entity)) {
-                    System.out.println("🔥 Волк ест зайца " + newPosition);
+                    System.out.println(" Волк ест зайца " + newPosition);
                     eatVictim(entityManager, victim.cast(entity));
                 }
             } else {
@@ -67,7 +70,7 @@ public abstract class Creature extends Entity {
         }
     }
 
-    private void moveRandomly(EntityManager map) {//рандомный ход
+    private void moveRandomly() {
         Random random = new Random();
         List<Coordinates> possibleMoves = new ArrayList<>();
         for (int rows = -animalSpeed; rows <= animalSpeed; rows++) {
@@ -102,7 +105,7 @@ public abstract class Creature extends Entity {
 
     }
 
-    private void eatVictim(EntityManager entityManager, Entity entity) {//поедания жертвы
+    private void eatVictim(EntityManager entityManager, Entity entity) {
         if (!findsTarget.isFood(getCoordinates())) {
             System.out.println("This object is not food.");
         } else {

@@ -14,18 +14,18 @@ import java.util.Random;
 
 public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
-    private final EntityManager getEntityManager;
+    private final EntityManager entityManager;
 
     public CreateEntityOnMap(int rows, int columns) {
-        this.getEntityManager = new EntityManager(rows, columns);
+        this.entityManager = new EntityManager(rows, columns);
     }
 
-    public void FillTheMapWithObjects() {//заполнения карты существами
+    public void FillTheMapWithObjects() {
 
-        int totalCells = getEntityManager.getTotalRows() * getEntityManager.getTotalColumns();
+        int totalCells = entityManager.getTotalRows() * entityManager.getTotalColumns();
 
         int countingSpawnObjectsOnTheMap = Math.max(1, (int) Math.ceil((TOTAL_PERCENT_ENTITY / 100.0) * totalCells));
-        HashSet<Coordinates> occupiedCells = getEntityManager.getOccupiedCells();
+        HashSet<Coordinates> occupiedCells = entityManager.getOccupiedCells();
 
         for (EnumObject enumObject : EnumObject.values()) {
             int count = 0;
@@ -36,14 +36,14 @@ public class CreateEntityOnMap {
                     continue;
                 }
 
-                getEntityManager.setEntity(randomCell, createEntity(enumObject, randomCell));
+                entityManager.setEntity(randomCell, createEntity(enumObject, randomCell));
                 count++;
             }
         }
     }
 
     public EntityManager getEntityManager() {
-        return getEntityManager;
+        return entityManager;
     }
 
     private Entity createEntity(EnumObject enumObject, Coordinates coordinates) {//создания объектов
@@ -55,9 +55,9 @@ public class CreateEntityOnMap {
             case TREE:
                 return new Tree(coordinates);
             case HERBIVORE:
-                return new Herbivore(coordinates, "Rabbit", 2);
+                return new Herbivore(coordinates, "Rabbit", 2, entityManager);
             case PREDATOR:
-                return new Predator(coordinates, "Wolf", 2);
+                return new Predator(coordinates, "Wolf", 2, entityManager);
             default:
                 throw new IllegalArgumentException("Unknown entity type" + enumObject);
 
@@ -66,17 +66,17 @@ public class CreateEntityOnMap {
     }
 
 
-    public Coordinates getRandomCell() {//рандомная клетка для спавна
+    public Coordinates getRandomCell() {
 
         Random random = new Random();
 
         List<Coordinates> emptyCell = new ArrayList<>();
 
-        for (int i = 0; i < getEntityManager.getTotalRows(); i++) {
-            for (int j = 0; j < getEntityManager.getTotalColumns(); j++) {
+        for (int i = 0; i < entityManager.getTotalRows(); i++) {
+            for (int j = 0; j < entityManager.getTotalColumns(); j++) {
                 Coordinates coordinates = new Coordinates(i, j);
 
-                if (!getEntityManager.getOccupiedCells().contains(coordinates)) {
+                if (!entityManager.getOccupiedCells().contains(coordinates)) {
                     emptyCell.add(coordinates);
                 }
             }

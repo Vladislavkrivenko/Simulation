@@ -1,11 +1,12 @@
 package animals;
 
 import mapManager.Coordinates;
+import mapManager.EntityManager;
 
 public class Predator extends Creature {
 
-    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed) {
-        super(coordinates, "Wolf", 2, Herbivore.class);
+    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager) {
+        super(coordinates, "Wolf", 2, Herbivore.class, entityManager);
 
     }
 
@@ -31,7 +32,7 @@ public class Predator extends Creature {
     }
 
     private void createPredator() {
-        new Predator(getCoordinates(), "Wolf", 2);
+        new Predator(getCoordinates(), "Wolf", 2, entityManager);
     }
 
 }
