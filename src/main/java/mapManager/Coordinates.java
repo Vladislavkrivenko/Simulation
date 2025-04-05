@@ -3,15 +3,15 @@ package mapManager;
 import java.util.Objects;
 
 public class Coordinates {
-    private final Integer mapWidth;
-    private final Integer mapHeight;
+    private final int mapWidth;
+    private final int mapHeight;
 
-    public Integer getMapWidth() {
+    public int getMapWidth() {
         return mapWidth;
     }
 
 
-    public Integer getMapHeight() {
+    public int getMapHeight() {
         return mapHeight;
     }
 
@@ -21,16 +21,22 @@ public class Coordinates {
         this.mapHeight = mapHeight;
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Coordinates other = (Coordinates) obj;
-        return mapWidth.equals(other.mapWidth) && mapHeight.equals(other.mapHeight);
+        return mapWidth == other.mapWidth && mapHeight == other.mapHeight;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(mapWidth, mapHeight);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + mapWidth + ", " + mapHeight + ")";
     }
 }

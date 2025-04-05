@@ -1,5 +1,6 @@
 package moveAnimal;
 
+import animals.Entity;
 import mapManager.Coordinates;
 import mapManager.EntityManager;
 
@@ -24,18 +25,22 @@ public class SearchAlgorithm {
         }
         Queue<Coordinates> queue = new LinkedList<>();//
         Set<Coordinates> visited = new HashSet<>();
+        cameFrom.clear();
+        targetCoordinates = null;
+
         queue.add(start);
-        visited.add(queue.element());
+        visited.add(start);
 
         while (!queue.isEmpty()) {
             visited.add(queue.element());
             Coordinates current = queue.poll();
 
-            if (!(entityManager.isSquareEmpty(current))
-                    && entityManager.getEntity(current).getClass().equals(FindsTarget.victim)) {
+            Entity currentEntity = entityManager.getEntity(current);
+            if (FindsTarget.victim.isInstance(currentEntity)) {
                 targetCoordinates = current;
-                System.out.println("validation on target");
+                System.out.println("Найдена цель на: " + current);
                 break;
+
             }
             List<Coordinates> neighbours = findsTarget.getNeighbors(current, entityManager);
             for (Coordinates square : neighbours) {
@@ -50,14 +55,23 @@ public class SearchAlgorithm {
         return getPath();
     }
 
+
     private List<Coordinates> getPath() {
         List<Coordinates> path = new LinkedList<>();
-        while (targetCoordinates != null) {
-            path.add(targetCoordinates);
-            targetCoordinates = cameFrom.get(targetCoordinates);
+
+        Coordinates step = targetCoordinates;
+        while (step != null && cameFrom.containsKey(step)) {
+            path.add(step);
+            step = cameFrom.get(step);
         }
         Collections.reverse(path);
-        System.out.println("return path");
+
+        if (path.isEmpty()) {
+            System.out.println("Путь не найден!");
+        } else {
+            System.out.println("Путь найден: " + path);
+        }
+
         return path;
     }
 }

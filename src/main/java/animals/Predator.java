@@ -16,10 +16,6 @@ public class Predator extends Creature {
         super.setPosition(newPosition);
     }
 
-    public Coordinates getPredatorPosition() {
-        return getCoordinates();
-    }
-
     @Override
     public String getSprite() {
         return "🐺";

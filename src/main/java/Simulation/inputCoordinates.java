@@ -8,9 +8,10 @@ public class inputCoordinates {
     private static final int PAUSE = 3;
     private static final int ITERATE = 4;
     private final Scanner scanner = new Scanner(System.in);
-public void start(){
-    startGameLoop();
-}
+
+    public void start() {
+        startGameLoop();
+    }
 
     private int getUserChoice() {
         int num;

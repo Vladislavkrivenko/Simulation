@@ -26,6 +26,7 @@ public abstract class Creature extends Entity {
         this.findsTarget = new FindsTarget();
         this.moveAnimals = new SearchAlgorithm(findsTarget);
         this.findsTarget.setAlgorithm(moveAnimals);
+        this.findsTarget.setCreature(this);
 
 
     }
@@ -38,36 +39,34 @@ public abstract class Creature extends Entity {
             return;
         }
         while (true) {
-            List<Coordinates> targetPosition = findsTarget.getTargetForFood(entityManager, this.getCoordinates(), victim);
-            if (targetPosition == null || targetPosition.isEmpty()) {
-                System.out.println("Охотник не нашел жертву");
+            List<Coordinates> path = findsTarget.getTargetForFood(entityManager, this.getCoordinates(), victim);//вызов метода поиска цели, передаем ему(екземпляр класа из методами управления, координ с которой начинаем поиски, и жертву что ищем)
+            if ((path == null) || path.isEmpty() || (path.size() < 2)) {
+                System.out.println(this.typeOfAnimal + " не нашел " + victim);
                 moveRandomly();
                 break;
             }
 
-            List<Coordinates> path = moveAnimals.getBfs(entityManager, this.getCoordinates());
-            if (path.size() > 1) {
-                Coordinates oldPosition = this.getCoordinates();
-                Coordinates newPosition = path.get(1);
 
-                this.setPosition(newPosition);
-                entityManager.removeObject(oldPosition, this);
-                System.out.println("Удалено с " + oldPosition + ": " + entityManager.getEntity(oldPosition));
-                entityManager.setEntity(newPosition, this);
-                System.out
-                        .println("Добавлен на " + newPosition + ": " + entityManager.getEntity(newPosition));
+            Coordinates oldPosition = this.getCoordinates();
+            Coordinates newPosition = path.get(1);
 
-                Entity entity = entityManager.getEntity(newPosition);
-                if (victim.isInstance(entity)) {
-                    System.out.println(" Волк ест зайца " + newPosition);
-                    eatVictim(entityManager, victim.cast(entity));
-                }
-            } else {
-                System.out.println("Нету возможного движения для " + this.typeOfAnimal);
-                break;
+            Entity entityAtTarget = entityManager.getEntity(newPosition);
+            if (findsTarget.isFood(entityAtTarget)) {
+                eatVictim(entityManager, entityAtTarget);
+                System.out.println(this.typeOfAnimal + " їсть жертву на " + newPosition);
             }
 
+            System.out.println("Удалено с " + oldPosition + ": " + entityManager.getEntity(oldPosition));
+
+            entityManager.removeObject(oldPosition, this);
+            this.setPosition(newPosition);
+            entityManager.setEntity(newPosition, this);
+
+            System.out.println("Добавлен на " + newPosition + ": " + entityManager.getEntity(newPosition));
+            break;
         }
+
+
     }
 
     private void moveRandomly() {
@@ -78,11 +77,11 @@ public abstract class Creature extends Entity {
                 if (rows == 0 && colum == 0)
                     continue;
 
-                Coordinates newCoords = new Coordinates(this.getCoordinates().getMapWidth() + rows,
+                Coordinates newCoordinates = new Coordinates(this.getCoordinates().getMapWidth() + rows,
                         this.getCoordinates().getMapHeight() + colum);
 
-                if (entityManager.isInsideMapBorder(newCoords) && entityManager.isSquareEmpty(newCoords)) {
-                    possibleMoves.add(newCoords);
+                if (entityManager.isInsideMapBorder(newCoordinates) && entityManager.isSquareEmpty(newCoordinates)) {
+                    possibleMoves.add(newCoordinates);
                 }
             }
         }
@@ -106,10 +105,12 @@ public abstract class Creature extends Entity {
     }
 
     private void eatVictim(EntityManager entityManager, Entity entity) {
-        if (!findsTarget.isFood(getCoordinates())) {
+        if (!findsTarget.isFood(entity)) {
             System.out.println("This object is not food.");
         } else {
-            entityManager.removeObject(entity.getCoordinates(), entity);
+            Coordinates eatCoordinates = entity.getCoordinates();
+            entityManager.removeObject(eatCoordinates, entity);
+            System.out.println("Жертва сьедена и  удалена " + eatCoordinates + ": " + entity);
         }
     }
 

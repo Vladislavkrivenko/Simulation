@@ -3,14 +3,14 @@ package mapManager;
 import animals.Entity;
 import animals.Herbivore;
 import animals.Predator;
-import objects.Grass;
-import objects.Rock;
-import objects.Tree;
+import entity.Grass;
+import entity.Rock;
+import entity.Tree;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
@@ -25,7 +25,7 @@ public class CreateEntityOnMap {
         int totalCells = entityManager.getTotalRows() * entityManager.getTotalColumns();
 
         int countingSpawnObjectsOnTheMap = Math.max(1, (int) Math.ceil((TOTAL_PERCENT_ENTITY / 100.0) * totalCells));
-        HashSet<Coordinates> occupiedCells = entityManager.getOccupiedCells();
+        Set<Coordinates> occupiedCells = entityManager.getOccupiedCells();
 
         for (EnumObject enumObject : EnumObject.values()) {
             int count = 0;

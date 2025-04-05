@@ -18,51 +18,21 @@ public class Main {
         DrawMap render = new DrawMap();
 
         List<Creature> animal = new ArrayList<>();
-//
-        for (Map.Entry<Coordinates, Entity> entry : game.getEntityManager().getLocationOfObject().entrySet()) {
+
+        for (Map.Entry<Coordinates, Entity> entry : game.getEntityManager().getLocationOfObject().entrySet()) {//цикл который витягивает только животных
             if (entry.getValue() instanceof Creature) {
                 animal.add((Creature) entry.getValue());
             }
         }
         render.drawingMap(game.getEntityManager());
         for (Creature creature : animal) {
-            Coordinates oldPosition = creature.getCoordinates();
-
+            creature.makeMove();
             if (game.getEntityManager().getLocationOfObject().containsValue(creature)) {
-                creature.makeMove();
-                Coordinates newPosition = creature.getCoordinates();
-
-                if(!oldPosition.equals(newPosition)){
-                    game.getEntityManager().removeObject(oldPosition,creature);
-                    game.getEntityManager().setEntity(newPosition,creature);
-                }
             }
             render.drawingMap(game.getEntityManager());
         }
-        //
-        // Iterator<Map.Entry<Coordinates, Entity>> iterator = game.getEntityManager().getLocationOfObject().entrySet().iterator();
 
-        //        while (iterator.hasNext()) {
-//            Map.Entry<Coordinates, Entity> ent = iterator.next();
-//            if (ent.getValue() instanceof Herbivore) {
-//                animal.add((Creature) ent.getValue());
-//            } else if (ent.getValue() instanceof Predator) {
-//                animal.add((Creature) ent.getValue());
-//            }
-//        }
-//        render.drawingMap(game.getEntityManager());
-//        for (Creature creature : animal) {
-//
-//            if (game.getEntityManager().getLocationOfObject().containsValue(creature)) {
-////                if (creature instanceof Herbivore) {
-////                    continue;
-////                }
-//                creature.makeMove();
-//            }
-//            render.drawingMap(game.getEntityManager());
-//        }
         render.drawingMap(game.getEntityManager());
-        int num = 123;
     }
 
 }

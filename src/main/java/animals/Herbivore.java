@@ -2,7 +2,7 @@ package animals;
 
 import mapManager.Coordinates;
 import mapManager.EntityManager;
-import objects.Grass;
+import entity.Grass;
 
 public class Herbivore extends Creature {
 
@@ -15,9 +15,6 @@ public class Herbivore extends Creature {
         super.setPosition(newPosition);
     }
 
-    public Coordinates getHerbivorePosition() {
-        return getCoordinates();
-    }
 
     @Override
     public String getSprite() {

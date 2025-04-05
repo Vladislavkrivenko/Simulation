@@ -9,7 +9,7 @@ public class DrawMap {
     public static final String EMPTY_SPRITE = "\033[38;5;94m";//
     public static final String SQUARE_UNICODE = "🏿";
 
-    public void drawingMap(EntityManager entityManager) {//отрисовка карты
+    public void drawingMap(EntityManager entityManager) {
         for (int colum = 0; colum < entityManager.getTotalColumns(); colum++) {
             StringBuilder line = new StringBuilder();
             for (int rows = 0; rows < entityManager.getTotalRows(); rows++) {

@@ -4,13 +4,16 @@ import animals.Entity;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 public class EntityManager {
     private final int totalRows;
     private final int totalColumns;
-    private final HashMap<Coordinates, Entity> locationOfObject = new HashMap<>();
-    private final HashSet<Coordinates> occupiedCells = new HashSet<>();
+    private final Map<Coordinates, Entity> locationOfObject = new HashMap<>();
+    private final Set<Coordinates> occupiedCells = new HashSet<>();
+    private final Map<Coordinates, Entity> eatenWhole = new HashMap<>();
 
     public EntityManager(int totalRows, int totalColumns) {
         super();
@@ -42,7 +45,7 @@ public class EntityManager {
     }
 
     public void removeObject(Coordinates coordinates, Entity entity) {
-        if (locationOfObject.containsKey(coordinates) && locationOfObject.get(coordinates) == entity) {
+        if (locationOfObject.containsKey(coordinates) && locationOfObject.get(coordinates).equals(entity)) {
             locationOfObject.remove(coordinates);
             System.out.println("❌ объект удален " + entity.getClass().getSimpleName() + " с " + coordinates);
         } else {
@@ -51,15 +54,16 @@ public class EntityManager {
     }
 
 
-    public HashSet<Coordinates> getOccupiedCells() {
+    public Set<Coordinates> getOccupiedCells() {
         return occupiedCells;
     }
 
-    public HashMap<Coordinates, Entity> getLocationOfObject() {
+    public Map<Coordinates, Entity> getLocationOfObject() {
         return locationOfObject;
     }
 
     public boolean isInsideMapBorder(Coordinates coordinates) {
-        return coordinates.getMapWidth() < getTotalRows() && coordinates.getMapHeight() < getTotalColumns();
+        return coordinates.getMapWidth() >= 0 && coordinates.getMapWidth() < totalRows
+                && coordinates.getMapHeight() >= 0 && coordinates.getMapHeight() < totalColumns;
     }
 }
