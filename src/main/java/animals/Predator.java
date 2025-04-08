@@ -2,14 +2,14 @@ package animals;
 
 import mapManager.Coordinates;
 import mapManager.EntityManager;
+import mapManager.GridManager;
 
 public class Predator extends Creature {
 
-    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager) {
-        super(coordinates, "Wolf", 2, Herbivore.class, entityManager);
+    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, GridManager gridManager) {
+        super(coordinates, "Wolf", 2, Herbivore.class, entityManager, gridManager);
 
     }
-
 
     @Override
     public void setPosition(Coordinates newPosition) {
@@ -28,7 +28,7 @@ public class Predator extends Creature {
     }
 
     private void createPredator() {
-        new Predator(getCoordinates(), "Wolf", 2, entityManager);
+        new Predator(getCoordinates(), "Wolf", 2, entityManager, gridManager);
     }
 
 }

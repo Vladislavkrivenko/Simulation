@@ -4,17 +4,24 @@ import animals.Entity;
 import interf.EntityImage;
 
 public class DrawMap {
+    private final GridManager gridManager;
+    private final EntityManager entityManager;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String EMPTY_SPRITE = "\033[38;5;94m";//
     public static final String SQUARE_UNICODE = "🏿";
 
-    public void drawingMap(EntityManager entityManager) {
-        for (int colum = 0; colum < entityManager.getTotalColumns(); colum++) {
+    public DrawMap(GridManager gridManager, EntityManager entityManager) {
+        this.gridManager = gridManager;
+        this.entityManager = entityManager;
+    }
+
+    public void drawingMap() {
+        for (int colum = 0; colum < gridManager.getTotalColumns(); colum++) {
             StringBuilder line = new StringBuilder();
-            for (int rows = 0; rows < entityManager.getTotalRows(); rows++) {
+            for (int rows = 0; rows < gridManager.getTotalRows(); rows++) {
                 Coordinates coordinates = new Coordinates(colum, rows);
-                if (entityManager.isSquareEmpty(coordinates)) {
+                if (gridManager.getSquareEmpty(coordinates, entityManager)) {
                     line.append(getSpriteForEmptySquare(coordinates));
 
                 } else {

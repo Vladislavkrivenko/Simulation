@@ -15,14 +15,16 @@ import java.util.Set;
 public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
     private final EntityManager entityManager;
+    private final GridManager gridManager;
 
     public CreateEntityOnMap(int rows, int columns) {
-        this.entityManager = new EntityManager(rows, columns);
+        this.gridManager = new GridManager(rows, columns);
+        this.entityManager = new EntityManager();
     }
 
-    public void FillTheMapWithObjects() {
+    public void fillTheMapWithObjects() {
 
-        int totalCells = entityManager.getTotalRows() * entityManager.getTotalColumns();
+        int totalCells = gridManager.getTotalRows() * gridManager.getTotalColumns();
 
         int countingSpawnObjectsOnTheMap = Math.max(1, (int) Math.ceil((TOTAL_PERCENT_ENTITY / 100.0) * totalCells));
         Set<Coordinates> occupiedCells = entityManager.getOccupiedCells();
@@ -42,11 +44,7 @@ public class CreateEntityOnMap {
         }
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    private Entity createEntity(EnumObject enumObject, Coordinates coordinates) {//создания объектов
+    private Entity createEntity(EnumObject enumObject, Coordinates coordinates) {
         switch (enumObject) {
             case ROCK:
                 return new Rock(coordinates);
@@ -55,9 +53,9 @@ public class CreateEntityOnMap {
             case TREE:
                 return new Tree(coordinates);
             case HERBIVORE:
-                return new Herbivore(coordinates, "Rabbit", 2, entityManager);
+                return new Herbivore(coordinates, "Rabbit", 2, entityManager, gridManager);
             case PREDATOR:
-                return new Predator(coordinates, "Wolf", 2, entityManager);
+                return new Predator(coordinates, "Wolf", 2, entityManager, gridManager);
             default:
                 throw new IllegalArgumentException("Unknown entity type" + enumObject);
 
@@ -72,8 +70,8 @@ public class CreateEntityOnMap {
 
         List<Coordinates> emptyCell = new ArrayList<>();
 
-        for (int i = 0; i < entityManager.getTotalRows(); i++) {
-            for (int j = 0; j < entityManager.getTotalColumns(); j++) {
+        for (int i = 0; i < gridManager.getTotalRows(); i++) {
+            for (int j = 0; j < gridManager.getTotalColumns(); j++) {
                 Coordinates coordinates = new Coordinates(i, j);
 
                 if (!entityManager.getOccupiedCells().contains(coordinates)) {
@@ -90,4 +88,11 @@ public class CreateEntityOnMap {
 
     }
 
+    public GridManager getGridManager() {
+        return gridManager;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 }

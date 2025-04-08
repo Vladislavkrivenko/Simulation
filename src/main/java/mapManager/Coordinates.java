@@ -6,6 +6,12 @@ public class Coordinates {
     private final int mapWidth;
     private final int mapHeight;
 
+    public Coordinates(int mapWidth, int mapHeight) {
+        super();
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
+    }
+
     public int getMapWidth() {
         return mapWidth;
     }
@@ -14,13 +20,6 @@ public class Coordinates {
     public int getMapHeight() {
         return mapHeight;
     }
-
-    public Coordinates(int mapWidth, int mapHeight) {
-        super();
-        this.mapWidth = mapWidth;
-        this.mapHeight = mapHeight;
-    }
-
 
     @Override
     public boolean equals(Object obj) {
