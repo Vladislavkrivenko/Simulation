@@ -1,6 +1,6 @@
-package animals;
+package animalService;
 
-import mapManager.Coordinates;
+import coordinatesManager.Coordinates;
 import interf.EntityImage;
 
 

@@ -1,7 +1,7 @@
 package entity;
 
-import animals.Entity;
-import mapManager.Coordinates;
+import animalService.Entity;
+import coordinatesManager.Coordinates;
 import interf.EntityImage;
 
 public class Tree extends Entity implements EntityImage {

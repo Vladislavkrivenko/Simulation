@@ -1,16 +1,13 @@
 package moveAnimal;
 
-import animals.Creature;
-import animals.Entity;
-import mapManager.Coordinates;
-import mapManager.EntityManager;
-import mapManager.GridManager;
+import animalService.Creature;
+import animalService.Entity;
+import coordinatesManager.Coordinates;
+import coordinatesManager.GridManager;
 
 import java.util.List;
 
 public class FindsTarget {
-    private EntityManager entityManager;
-    private GridManager gridManager;
     private Creature creature;
     protected Class<? extends Entity> victimClass;
     private SearchAlgorithm algorithm;
@@ -40,14 +37,8 @@ public class FindsTarget {
         return creature;
     }
 
-    public void configureDependencies(EntityManager em, GridNavigator nav) {
-        this.entityManager = em;
-        this.algorithm.setEntityManager(em);
-        this.algorithm.setGridNavigator(nav);
-    }
-
-    public List<Coordinates> getTargetForFood(GridManager gridManager, Coordinates coordinates, int maxDistance) {//+
-        return algorithm.getBfs(gridManager, coordinates, maxDistance);
+    public List<Coordinates> getTargetForFood(GridManager gridManager, Coordinates coordinates) {
+        return algorithm.getBfs(gridManager, coordinates);
     }
 
 }

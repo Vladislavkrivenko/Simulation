@@ -1,7 +1,7 @@
-package animals;
+package animalService;
 
-import mapManager.Coordinates;
-import mapManager.EntityManager;
+import coordinatesManager.Coordinates;
+import animalManager.EntityManager;
 import moveAnimal.TargetClassifier;
 
 public class EatingService {
@@ -15,11 +15,11 @@ public class EatingService {
 
     public void eatVictim(Entity target) {
         if (!targetClassifier.isFood(target)) {
-            System.out.println("Цей об'єкт не є їжею.");
+            System.out.println("Это не еда.");
         } else {
             Coordinates victimPosition = target.getCoordinates();
             entityManager.removeObject(victimPosition, target);
-            System.out.println("Жертва з'їдена та видалена з " + victimPosition + ": " + target);
+            System.out.println("Жертва сьедена и удалена с " + victimPosition + ": " + target);
         }
     }
 

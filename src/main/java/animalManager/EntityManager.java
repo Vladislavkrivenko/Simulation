@@ -1,6 +1,7 @@
-package mapManager;
+package animalManager;
 
-import animals.Entity;
+import animalService.Entity;
+import coordinatesManager.Coordinates;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +10,6 @@ import java.util.Set;
 
 
 public class EntityManager {
-
     private final Map<Coordinates, Entity> locationOfObject = new HashMap<>();
     private final Set<Coordinates> occupiedCells = new HashSet<>();
 
@@ -37,7 +37,6 @@ public class EntityManager {
             System.out.println(" Не удалось удалить " + entity.getClass().getSimpleName() + " с " + coordinates);
         }
     }
-
 
     public Set<Coordinates> getOccupiedCells() {
         return occupiedCells;

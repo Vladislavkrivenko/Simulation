@@ -1,6 +1,9 @@
 package mapManager;
 
-import animals.Entity;
+import animalManager.EntityManager;
+import coordinatesManager.GridManager;
+import animalService.Entity;
+import coordinatesManager.Coordinates;
 import interf.EntityImage;
 
 public class DrawMap {

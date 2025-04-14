@@ -1,9 +1,10 @@
-package animals;
+package animalService;
 
-import mapManager.Coordinates;
-import mapManager.EntityManager;
-import mapManager.GridManager;
+import coordinatesManager.Coordinates;
+import animalManager.EntityManager;
+import coordinatesManager.GridManager;
 import moveAnimal.FindsTarget;
+import moveAnimal.GridNavigator;
 import moveAnimal.SearchAlgorithm;
 import moveAnimal.TargetClassifier;
 
@@ -16,29 +17,33 @@ public abstract class Creature extends Entity {
     protected int animalSpeed;
     protected FindsTarget findsTarget;
     protected Class<? extends Entity> victim;
+
     protected EntityManager entityManager;
-    private final TargetClassifier targetClassifier;
     protected final GridManager gridManager;
+    protected final GridNavigator gridNavigator;
+
     private final EatingService eatingService;
+    private final TargetClassifier targetClassifier;
     private final MovementService movementService;
 
-    private Creature creature;
-
-    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager, GridManager gridManager) {
+    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager, GridManager gridManager, GridNavigator gridNavigator) {
         super(coordinates);
         this.typeOfAnimal = typeOfAnimal;
         this.animalSpeed = animalSpeed;
         this.victim = victim;
         this.entityManager = entityManager;
         this.gridManager = gridManager;
+        this.gridNavigator = gridNavigator;
 
         this.findsTarget = new FindsTarget();
         this.targetClassifier = new TargetClassifier(findsTarget, this);
         this.eatingService = new EatingService(entityManager, targetClassifier);
         this.movementService = new MovementService(entityManager);
 
-        SearchAlgorithm moveAnimals = new SearchAlgorithm(findsTarget);
-        this.findsTarget.setAlgorithm(moveAnimals);
+        SearchAlgorithm searchAlgorithm = new SearchAlgorithm(findsTarget);
+        searchAlgorithm.setEntityManager(entityManager);
+        searchAlgorithm.setGridNavigator(gridNavigator);
+        this.findsTarget.setAlgorithm(searchAlgorithm);
         this.findsTarget.setCreature(this);
         this.findsTarget.setVictim(victim);
     }
@@ -47,35 +52,70 @@ public abstract class Creature extends Entity {
 
     public void makeMove() {
         if (victim == null) {
-            System.out.println("Жертва не задана для " + this.typeOfAnimal);
+            System.out.println("Жертва не найдена для " + this.typeOfAnimal);
             return;
         }
+
         findsTarget.setVictim(victim);
 
-        List<Coordinates> path = findsTarget.getTargetForFood(gridManager, getCoordinates(), animalSpeed);
-        if (path == null || path.isEmpty()) {
-            System.out.println(typeOfAnimal + " не знайшов їжу.");
-            moveRandomly();
+        if (checkAdjacentAndEat()) {
             return;
+        }
+
+        if (pursueAndMaybeEat()) {
+            return;
+        }
+
+        System.out.println(typeOfAnimal + " не нашел еду.");
+        moveRandomly();
+    }
+
+    private boolean checkAdjacentAndEat() {
+        Coordinates currentPos = getCoordinates();
+
+        for (Coordinates neighbor : gridNavigator.getNeighbors(currentPos)) {
+            Entity entity = entityManager.getEntity(neighbor);
+            System.out.println("Перевірка їжі в клітинці " + neighbor + ": " + entity);
+
+            if (targetClassifier.isFood(entity)) {
+                eatingService.eatVictim(entity);
+                movementService.moveTo(this, neighbor);
+                System.out.println(typeOfAnimal + " сьел жертву на " + neighbor);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean pursueAndMaybeEat() {
+        Coordinates currentPos = getCoordinates();
+        List<Coordinates> path = findsTarget.getTargetForFood(gridManager, currentPos);
+
+        if (path == null || path.isEmpty()) {
+            return false;
         }
 
         if (path.size() == 2) {
             Coordinates victimCoordinates = path.get(1);
             Entity entityAtTarget = entityManager.getEntity(victimCoordinates);
+            System.out.println("Перевірка їжі в клітинці " + victimCoordinates + ": " + entityAtTarget);
+
             if (targetClassifier.isFood(entityAtTarget)) {
                 eatingService.eatVictim(entityAtTarget);
                 movementService.moveTo(this, victimCoordinates);
-                System.out.println(typeOfAnimal + " з'їв жертву на " + victimCoordinates);
-                return;
+                System.out.println(typeOfAnimal + " сьел жертву на " + victimCoordinates);
+                return true;
             }
         }
 
         Coordinates nextStep = path.get(Math.min(getAnimalSpeed(), path.size() - 1));
         movementService.moveTo(this, nextStep);
+        return true;
     }
 
 
-    private void moveRandomly() {
+    public void moveRandomly() {
         Random random = new Random();
         List<Coordinates> possibleMoves = new ArrayList<>();
 
@@ -84,7 +124,7 @@ public abstract class Creature extends Entity {
                 if (Math.abs(dx) + Math.abs(dy) > getAnimalSpeed() || (dx == 0 && dy == 0)) continue;
 
                 int newX = getCoordinates().getMapWidth() + dx;
-                int newY = getCoordinates().getMapWidth() + dy;
+                int newY = getCoordinates().getMapHeight() + dy;
 
                 Coordinates newCoordinates = new Coordinates(newX, newY);
 
@@ -112,5 +152,8 @@ public abstract class Creature extends Entity {
 
     }
 
+    public FindsTarget getFindsTarget() {
+        return findsTarget;
+    }
 
 }

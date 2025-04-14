@@ -1,9 +1,9 @@
 package moveAnimal;
 
-import animals.Entity;
-import mapManager.Coordinates;
-import mapManager.EntityManager;
-import mapManager.GridManager;
+import animalManager.EntityManager;
+import animalService.Entity;
+import coordinatesManager.Coordinates;
+import coordinatesManager.GridManager;
 
 import java.util.*;
 
@@ -17,6 +17,7 @@ public class SearchAlgorithm {
     public SearchAlgorithm(FindsTarget findsTarget) {
         this.findsTarget = findsTarget;
     }
+
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -25,33 +26,32 @@ public class SearchAlgorithm {
         this.gridNavigator = gridNavigator;
     }
 
-    public List<Coordinates> getBfs(GridManager gridManager, Coordinates start, int maxDistance) {
+    public List<Coordinates> getBfs(GridManager gridManager, Coordinates start) {
         if (gridManager == null) {
             throw new IllegalStateException("entityManager is null in SearchAlgorithm.bfs");
         }
 
         Queue<Coordinates> queue = new LinkedList<>();
         Set<Coordinates> visited = new HashSet<>();
-        Map<Coordinates, Integer> distance = new HashMap<>();//?
+
 
         cameFrom.clear();
         targetCoordinates = null;
 
         queue.add(start);
         visited.add(start);
-        distance.put(start, 0);
+
 
         while (!queue.isEmpty()) {
             Coordinates current = queue.poll();
-            int dist = distance.get(current);
 
-            if (dist > maxDistance) continue;
 
             Entity currentEntity = entityManager.getEntity(current);
             Class<? extends Entity> victimClass = findsTarget.getVictim();
 
             if (victimClass != null && victimClass.isInstance(currentEntity)) {
                 targetCoordinates = current;
+                System.out.println("Їжа знайдена в " + targetCoordinates);
                 break;
             }
 
@@ -61,11 +61,12 @@ public class SearchAlgorithm {
                     visited.add(neighbor);
                     queue.add(neighbor);
                     cameFrom.put(neighbor, current);
-                    distance.put(neighbor, dist + 1);
                 }
             }
         }
-
+        if (targetCoordinates == null) {
+            return new ArrayList<>();
+        }
         return getPath();
     }
 

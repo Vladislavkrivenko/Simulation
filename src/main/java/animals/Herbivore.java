@@ -1,14 +1,16 @@
 package animals;
 
-import mapManager.Coordinates;
-import mapManager.EntityManager;
+import animalService.Creature;
+import coordinatesManager.Coordinates;
+import animalManager.EntityManager;
 import entity.Grass;
-import mapManager.GridManager;
+import coordinatesManager.GridManager;
+import moveAnimal.GridNavigator;
 
 public class Herbivore extends Creature {
 
-    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, GridManager gridManager) {
-        super(coordinates, "Rabbit", 2, Grass.class, entityManager, gridManager);
+    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, GridManager gridManager, GridNavigator gridNavigator) {
+        super(coordinates, "Rabbit", 2, Grass.class, entityManager, gridManager, gridNavigator);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class Herbivore extends Creature {
 
 
     private void createHerbivore() {
-        new Herbivore(getCoordinates(), "Rabbit", 2, entityManager, gridManager);
+        new Herbivore(getCoordinates(), "Rabbit", 2, entityManager, gridManager, gridNavigator);
     }
 
 }

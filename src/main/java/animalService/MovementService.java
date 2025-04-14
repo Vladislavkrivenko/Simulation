@@ -1,7 +1,7 @@
-package animals;
+package animalService;
 
-import mapManager.Coordinates;
-import mapManager.EntityManager;
+import coordinatesManager.Coordinates;
+import animalManager.EntityManager;
 
 public class MovementService {
     private final EntityManager entityManager;
@@ -17,6 +17,6 @@ public class MovementService {
 
         creature.setPosition(newPosition);
         entityManager.setEntity(newPosition, creature);
-
+        System.out.println("Ходим из " + oldPosition + " на " + newPosition);
     }
 }

@@ -1,8 +1,8 @@
 package moveAnimal;
 
-import mapManager.Coordinates;
-import mapManager.EntityManager;
-import mapManager.GridManager;
+import coordinatesManager.Coordinates;
+import animalManager.EntityManager;
+import coordinatesManager.GridManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class GridNavigator {
     private final EntityManager entityManager;
     private final WalkabilityChecker walkabilityChecker;
 
-    public GridNavigator(GridManager gridManager, EntityManager entityManager,WalkabilityChecker walkabilityChecker) {
+    public GridNavigator(GridManager gridManager, EntityManager entityManager, WalkabilityChecker walkabilityChecker) {
         this.gridManager = gridManager;
         this.entityManager = entityManager;
         this.walkabilityChecker = walkabilityChecker;
@@ -36,5 +36,9 @@ public class GridNavigator {
         }
 
         return neighbors;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }

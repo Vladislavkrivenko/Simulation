@@ -1,11 +1,17 @@
 package mapManager;
 
-import animals.Entity;
+import animalManager.EntityManager;
+import animalManager.EnumObject;
+import animalService.Entity;
 import animals.Herbivore;
 import animals.Predator;
+import coordinatesManager.Coordinates;
+import coordinatesManager.GridManager;
 import entity.Grass;
 import entity.Rock;
 import entity.Tree;
+import moveAnimal.GridNavigator;
+import moveAnimal.WalkabilityChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +22,16 @@ public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
     private final EntityManager entityManager;
     private final GridManager gridManager;
+    private final GridNavigator gridNavigator;
 
     public CreateEntityOnMap(int rows, int columns) {
         this.gridManager = new GridManager(rows, columns);
         this.entityManager = new EntityManager();
+
+        WalkabilityChecker walkabilityChecker = new WalkabilityChecker(entityManager);
+        this.gridNavigator = new GridNavigator(gridManager, entityManager, walkabilityChecker);
     }
+
 
     public void fillTheMapWithObjects() {
 
@@ -53,9 +64,9 @@ public class CreateEntityOnMap {
             case TREE:
                 return new Tree(coordinates);
             case HERBIVORE:
-                return new Herbivore(coordinates, "Rabbit", 2, entityManager, gridManager);
+                return new Herbivore(coordinates, "Rabbit", 2, entityManager, gridManager, gridNavigator);
             case PREDATOR:
-                return new Predator(coordinates, "Wolf", 2, entityManager, gridManager);
+                return new Predator(coordinates, "Wolf", 2, entityManager, gridManager, gridNavigator);
             default:
                 throw new IllegalArgumentException("Unknown entity type" + enumObject);
 

@@ -1,11 +1,9 @@
-package moveAnimal;
-
-import mapManager.Coordinates;
+package coordinatesManager;
 
 public class CoordinateUtils {
 
-    private boolean getAdjacent(Coordinates x,Coordinates y){
-        return isAdjacent(x,y);
+    private boolean getAdjacent(Coordinates x, Coordinates y) {
+        return isAdjacent(x, y);
     }
 
     public boolean isAdjacent(Coordinates a, Coordinates b) {

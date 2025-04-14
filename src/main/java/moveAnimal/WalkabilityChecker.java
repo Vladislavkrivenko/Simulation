@@ -1,11 +1,11 @@
 package moveAnimal;
 
-import animals.Creature;
-import animals.Entity;
+import animalService.Creature;
+import animalService.Entity;
 import entity.Rock;
 import entity.Tree;
-import mapManager.Coordinates;
-import mapManager.EntityManager;
+import coordinatesManager.Coordinates;
+import animalManager.EntityManager;
 
 public class WalkabilityChecker {
     private final EntityManager entityManager;
@@ -14,9 +14,10 @@ public class WalkabilityChecker {
         this.entityManager = entityManager;
     }
 
-    public boolean getPassCells(Coordinates coordinatesCells){
+    public boolean getPassCells(Coordinates coordinatesCells) {
         return isWalkable(coordinatesCells);
     }
+
     private boolean isWalkable(Coordinates coordinates) {
         Entity entity = entityManager.getEntity(coordinates);
         if (entity == null) return true;

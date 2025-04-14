@@ -1,14 +1,14 @@
 package moveAnimal;
 
-import animals.Creature;
-import animals.Entity;
+import animalService.Creature;
+import animalService.Entity;
 import animals.Herbivore;
 import animals.Predator;
 import entity.Grass;
 
 public class TargetClassifier {
-    private FindsTarget findsTarget;
-    private Creature creature;
+    private final FindsTarget findsTarget;
+    private final Creature creature;
 
     public TargetClassifier(FindsTarget findsTarget, Creature creature) {
         this.findsTarget = findsTarget;
@@ -20,11 +20,18 @@ public class TargetClassifier {
     }
 
     private boolean isTargetFood(Entity entity) {
-        if (findsTarget.victimClass != null && findsTarget.victimClass.isInstance(entity)) {
-            return true;
+        Class<? extends Entity> victim = findsTarget.getVictim();
+        System.out.println("Жертва: " + victim);
+        if (victim != null) {
+            return victim.isInstance(entity);
         }
-        if (findsTarget.getCreature() instanceof Herbivore) return entity instanceof Grass;
-        if (creature instanceof Predator) return entity instanceof Herbivore;
+
+        if (findsTarget.getCreature() instanceof Herbivore) {
+            return entity instanceof Grass;
+        }
+        if (creature instanceof Predator) {
+            return entity instanceof Herbivore;
+        }
         return false;
     }
 }

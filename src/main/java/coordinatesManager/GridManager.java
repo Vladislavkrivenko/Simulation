@@ -1,4 +1,6 @@
-package mapManager;
+package coordinatesManager;
+
+import animalManager.EntityManager;
 
 public class GridManager {
     private final int totalRows;
@@ -34,6 +36,5 @@ public class GridManager {
     private boolean isSquareEmpty(Coordinates coordinates, EntityManager entityManager) {
         return !entityManager.getLocationOfObject().containsKey(coordinates);
     }
-
 
 }
