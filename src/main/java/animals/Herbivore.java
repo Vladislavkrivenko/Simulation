@@ -1,23 +1,22 @@
 package animals;
 
-import animalService.Creature;
-import coordinatesManager.Coordinates;
-import animalManager.EntityManager;
+import entityService.Creature;
+import coordinatesService.Coordinates;
+import animalService.EntityManager;
 import entity.Grass;
-import coordinatesManager.GridManager;
-import moveAnimal.GridNavigator;
+import coordinatesService.MapService;
+import movingService.ChecksNeighbors;
 
 public class Herbivore extends Creature {
 
-    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, GridManager gridManager, GridNavigator gridNavigator) {
-        super(coordinates, "Rabbit", 2, Grass.class, entityManager, gridManager, gridNavigator);
+    public Herbivore(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, MapService mapService, ChecksNeighbors checksNeighbors) {
+        super(coordinates, "Rabbit", 2, Grass.class, entityManager, mapService, checksNeighbors);
     }
 
     @Override
     public void setPosition(Coordinates newPosition) {
         super.setPosition(newPosition);
     }
-
 
     @Override
     public String getSprite() {
@@ -30,9 +29,8 @@ public class Herbivore extends Creature {
 
     }
 
-
     private void createHerbivore() {
-        new Herbivore(getCoordinates(), "Rabbit", 2, entityManager, gridManager, gridNavigator);
+        new Herbivore(getCoordinates(), "Rabbit", 2, entityManager, mapService, checksNeighbors);
     }
 
 }

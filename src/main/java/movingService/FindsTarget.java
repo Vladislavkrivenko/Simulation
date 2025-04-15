@@ -1,9 +1,9 @@
-package moveAnimal;
+package movingService;
 
-import animalService.Creature;
-import animalService.Entity;
-import coordinatesManager.Coordinates;
-import coordinatesManager.GridManager;
+import entityService.Creature;
+import entityService.Entity;
+import coordinatesService.Coordinates;
+import coordinatesService.MapService;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ public class FindsTarget {
         return victimClass;
     }
 
-
     public void setAlgorithm(SearchAlgorithm algorithm) {
         this.algorithm = algorithm;
     }
@@ -37,8 +36,8 @@ public class FindsTarget {
         return creature;
     }
 
-    public List<Coordinates> getTargetForFood(GridManager gridManager, Coordinates coordinates) {
-        return algorithm.getBfs(gridManager, coordinates);
+    public List<Coordinates> getTargetForFood(MapService mapService, Coordinates coordinates) {
+        return algorithm.getBfs(mapService, coordinates);
     }
 
 }

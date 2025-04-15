@@ -1,7 +1,7 @@
-package animalManager;
+package animalService;
 
-import animalService.Entity;
-import coordinatesManager.Coordinates;
+import entityService.Entity;
+import coordinatesService.Coordinates;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,15 +17,16 @@ public class EntityManager {
         super();
     }
 
-
     public void setEntity(Coordinates coordinates, Entity entity) {
         entity.setCoordinates(coordinates);
         locationOfObject.put(coordinates, entity);
         occupiedCells.add(coordinates);
     }
 
-
     public Entity getEntity(Coordinates coordinates) {
+        if (coordinates == null) {
+            System.out.println("Entity null");
+        }
         return locationOfObject.get(coordinates);
     }
 
@@ -33,8 +34,6 @@ public class EntityManager {
         if (locationOfObject.containsKey(coordinates) && locationOfObject.get(coordinates).equals(entity)) {
             locationOfObject.remove(coordinates);
             System.out.println(" объект удален " + entity.getClass().getSimpleName() + " с " + coordinates);
-        } else {
-            System.out.println(" Не удалось удалить " + entity.getClass().getSimpleName() + " с " + coordinates);
         }
     }
 
@@ -45,6 +44,5 @@ public class EntityManager {
     public Map<Coordinates, Entity> getLocationOfObject() {
         return locationOfObject;
     }
-
 
 }

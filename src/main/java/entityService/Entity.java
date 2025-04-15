@@ -1,10 +1,10 @@
-package animalService;
+package entityService;
 
-import coordinatesManager.Coordinates;
-import interf.EntityImage;
+import coordinatesService.Coordinates;
+import interfacesService.ImageInterface;
 
 
-public abstract class Entity implements EntityImage {
+public abstract class Entity implements ImageInterface {
     private Coordinates coordinates;
 
     public Entity(Coordinates coordinates) {

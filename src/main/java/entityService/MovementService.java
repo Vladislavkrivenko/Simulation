@@ -1,7 +1,7 @@
-package animalService;
+package entityService;
 
-import coordinatesManager.Coordinates;
-import animalManager.EntityManager;
+import coordinatesService.Coordinates;
+import animalService.EntityManager;
 
 public class MovementService {
     private final EntityManager entityManager;

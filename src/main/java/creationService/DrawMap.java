@@ -1,30 +1,30 @@
-package mapManager;
+package creationService;
 
-import animalManager.EntityManager;
-import coordinatesManager.GridManager;
-import animalService.Entity;
-import coordinatesManager.Coordinates;
-import interf.EntityImage;
+import animalService.EntityManager;
+import coordinatesService.MapService;
+import entityService.Entity;
+import coordinatesService.Coordinates;
+import interfacesService.ImageInterface;
 
 public class DrawMap {
-    private final GridManager gridManager;
+    private final MapService mapService;
     private final EntityManager entityManager;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String EMPTY_SPRITE = "\033[38;5;94m";//
     public static final String SQUARE_UNICODE = "🏿";
 
-    public DrawMap(GridManager gridManager, EntityManager entityManager) {
-        this.gridManager = gridManager;
+    public DrawMap(MapService mapService, EntityManager entityManager) {
+        this.mapService = mapService;
         this.entityManager = entityManager;
     }
 
     public void drawingMap() {
-        for (int colum = 0; colum < gridManager.getTotalColumns(); colum++) {
+        for (int colum = 0; colum < mapService.getTotalColumns(); colum++) {
             StringBuilder line = new StringBuilder();
-            for (int rows = 0; rows < gridManager.getTotalRows(); rows++) {
+            for (int rows = 0; rows < mapService.getTotalRows(); rows++) {
                 Coordinates coordinates = new Coordinates(colum, rows);
-                if (gridManager.getSquareEmpty(coordinates, entityManager)) {
+                if (mapService.getSquareEmpty(coordinates, entityManager)) {
                     line.append(getSpriteForEmptySquare(coordinates));
 
                 } else {
@@ -45,7 +45,7 @@ public class DrawMap {
 
     private String getEntitySprite(Entity entity) {
         if (entity != null) {
-            return ((EntityImage) entity).getSprite();
+            return ((ImageInterface) entity).getSprite();
         }
         return "Unknown image";
     }

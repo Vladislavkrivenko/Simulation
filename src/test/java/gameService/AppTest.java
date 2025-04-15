@@ -1,4 +1,4 @@
-package Simulation;
+package gameService;
 
 import static org.junit.Assert.assertTrue;
 

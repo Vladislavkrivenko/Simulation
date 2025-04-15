@@ -1,7 +1,7 @@
-package moveAnimal;
+package movingService;
 
-import animalService.Creature;
-import animalService.Entity;
+import entityService.Creature;
+import entityService.Entity;
 import animals.Herbivore;
 import animals.Predator;
 import entity.Grass;
@@ -21,12 +21,11 @@ public class TargetClassifier {
 
     private boolean isTargetFood(Entity entity) {
         Class<? extends Entity> victim = findsTarget.getVictim();
-        System.out.println("Жертва: " + victim);
         if (victim != null) {
             return victim.isInstance(entity);
         }
 
-        if (findsTarget.getCreature() instanceof Herbivore) {
+        if (creature instanceof Herbivore) {
             return entity instanceof Grass;
         }
         if (creature instanceof Predator) {

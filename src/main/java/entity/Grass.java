@@ -1,11 +1,11 @@
 package entity;
 
-import animalService.Entity;
-import coordinatesManager.Coordinates;
-import interf.EntityImage;
+import entityService.Entity;
+import coordinatesService.Coordinates;
+import interfacesService.ImageInterface;
 
 
-public class Grass extends Entity implements EntityImage {
+public class Grass extends Entity implements ImageInterface {
     public Grass(Coordinates coordinates, int health) {
         super(coordinates);
     }

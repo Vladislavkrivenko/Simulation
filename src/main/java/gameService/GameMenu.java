@@ -1,8 +1,8 @@
-package Simulation;
+package gameService;
 
 import java.util.Scanner;
 
-public class inputCoordinates {
+public class GameMenu {
     private static final int START_GAME = 1;
     private static final int STOP_GAME = 2;
     private static final int PAUSE = 3;
@@ -16,7 +16,7 @@ public class inputCoordinates {
     private int getUserChoice() {
         int num;
         while (true) {
-            System.out.print("Enter a number (1-START, 2-STOP, 3-PAUSE, 4-ITERATION): ");
+            System.out.print("Enter a number 1: START\n 2: STOP\n 3: PAUSE\n 4:1-ITERATION ");
             if (scanner.hasNextInt()) {
                 num = scanner.nextInt();
                 if (num >= 1 && num <= 4) {
@@ -42,7 +42,7 @@ public class inputCoordinates {
                     System.out.println("The game is stopped!");
                     break;
                 case PAUSE:
-                    System.out.println("Гру призупинено!");
+                    System.out.println("The game is paused!");
                     break;
                 case ITERATE:
                     System.out.println("Iterating...");

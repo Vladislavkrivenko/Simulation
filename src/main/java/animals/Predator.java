@@ -1,15 +1,15 @@
 package animals;
 
-import animalService.Creature;
-import coordinatesManager.Coordinates;
-import animalManager.EntityManager;
-import coordinatesManager.GridManager;
-import moveAnimal.GridNavigator;
+import entityService.Creature;
+import coordinatesService.Coordinates;
+import animalService.EntityManager;
+import coordinatesService.MapService;
+import movingService.ChecksNeighbors;
 
 public class Predator extends Creature {
 
-    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, GridManager gridManager, GridNavigator gridNavigator) {
-        super(coordinates, "Wolf", 2, Herbivore.class, entityManager, gridManager, gridNavigator);
+    public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, MapService mapService, ChecksNeighbors checksNeighbors) {
+        super(coordinates, "Wolf", 2, Herbivore.class, entityManager, mapService, checksNeighbors);
 
     }
 
@@ -30,7 +30,7 @@ public class Predator extends Creature {
     }
 
     private void createPredator() {
-        new Predator(getCoordinates(), "Wolf", 2, entityManager, gridManager, gridNavigator);
+        new Predator(getCoordinates(), "Wolf", 2, entityManager, mapService, checksNeighbors);
     }
 
 }

@@ -1,11 +1,11 @@
-package moveAnimal;
+package movingService;
 
-import animalService.Creature;
-import animalService.Entity;
+import entityService.Creature;
+import entityService.Entity;
 import entity.Rock;
 import entity.Tree;
-import coordinatesManager.Coordinates;
-import animalManager.EntityManager;
+import coordinatesService.Coordinates;
+import animalService.EntityManager;
 
 public class WalkabilityChecker {
     private final EntityManager entityManager;

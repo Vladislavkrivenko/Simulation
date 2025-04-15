@@ -1,4 +1,4 @@
-package coordinatesManager;
+package coordinatesService;
 
 import java.util.Objects;
 

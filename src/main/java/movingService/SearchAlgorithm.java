@@ -1,9 +1,9 @@
-package moveAnimal;
+package movingService;
 
-import animalManager.EntityManager;
-import animalService.Entity;
-import coordinatesManager.Coordinates;
-import coordinatesManager.GridManager;
+import animalService.EntityManager;
+import entityService.Entity;
+import coordinatesService.Coordinates;
+import coordinatesService.MapService;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class SearchAlgorithm {
     private Coordinates targetCoordinates = null;
     private final Map<Coordinates, Coordinates> cameFrom = new HashMap<>();
     private EntityManager entityManager;
-    private GridNavigator gridNavigator;
+    private ChecksNeighbors checksNeighbors;
 
     public SearchAlgorithm(FindsTarget findsTarget) {
         this.findsTarget = findsTarget;
@@ -22,18 +22,18 @@ public class SearchAlgorithm {
         this.entityManager = entityManager;
     }
 
-    public void setGridNavigator(GridNavigator gridNavigator) {
-        this.gridNavigator = gridNavigator;
+    public void ChecksNeighbors(ChecksNeighbors checksNeighbors) {
+        this.checksNeighbors = checksNeighbors;
     }
 
-    public List<Coordinates> getBfs(GridManager gridManager, Coordinates start) {
-        if (gridManager == null) {
+    public List<Coordinates> getBfs(MapService mapService, Coordinates start) {
+        if (mapService == null) {
             throw new IllegalStateException("entityManager is null in SearchAlgorithm.bfs");
         }
 
         Queue<Coordinates> queue = new LinkedList<>();
         Set<Coordinates> visited = new HashSet<>();
-
+        Class<? extends Entity> victimClass = findsTarget.getVictim();
 
         cameFrom.clear();
         targetCoordinates = null;
@@ -45,18 +45,14 @@ public class SearchAlgorithm {
         while (!queue.isEmpty()) {
             Coordinates current = queue.poll();
 
-
             Entity currentEntity = entityManager.getEntity(current);
-            Class<? extends Entity> victimClass = findsTarget.getVictim();
-
             if (victimClass != null && victimClass.isInstance(currentEntity)) {
                 targetCoordinates = current;
                 System.out.println("Їжа знайдена в " + targetCoordinates);
                 break;
             }
 
-
-            for (Coordinates neighbor : gridNavigator.getNeighbors(current)) {
+            for (Coordinates neighbor : checksNeighbors.getAllNeighbors(current)) {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
                     queue.add(neighbor);

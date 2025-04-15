@@ -1,12 +1,12 @@
-package animalService;
+package entityService;
 
-import coordinatesManager.Coordinates;
-import animalManager.EntityManager;
-import coordinatesManager.GridManager;
-import moveAnimal.FindsTarget;
-import moveAnimal.GridNavigator;
-import moveAnimal.SearchAlgorithm;
-import moveAnimal.TargetClassifier;
+import coordinatesService.Coordinates;
+import animalService.EntityManager;
+import coordinatesService.MapService;
+import movingService.FindsTarget;
+import movingService.ChecksNeighbors;
+import movingService.SearchAlgorithm;
+import movingService.TargetClassifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +19,21 @@ public abstract class Creature extends Entity {
     protected Class<? extends Entity> victim;
 
     protected EntityManager entityManager;
-    protected final GridManager gridManager;
-    protected final GridNavigator gridNavigator;
+    protected final MapService mapService;
+    protected final ChecksNeighbors checksNeighbors;
 
     private final EatingService eatingService;
     private final TargetClassifier targetClassifier;
     private final MovementService movementService;
 
-    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager, GridManager gridManager, GridNavigator gridNavigator) {
+    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager, MapService mapService, ChecksNeighbors checksNeighbors) {
         super(coordinates);
         this.typeOfAnimal = typeOfAnimal;
         this.animalSpeed = animalSpeed;
         this.victim = victim;
         this.entityManager = entityManager;
-        this.gridManager = gridManager;
-        this.gridNavigator = gridNavigator;
+        this.mapService = mapService;
+        this.checksNeighbors = checksNeighbors;
 
         this.findsTarget = new FindsTarget();
         this.targetClassifier = new TargetClassifier(findsTarget, this);
@@ -42,7 +42,7 @@ public abstract class Creature extends Entity {
 
         SearchAlgorithm searchAlgorithm = new SearchAlgorithm(findsTarget);
         searchAlgorithm.setEntityManager(entityManager);
-        searchAlgorithm.setGridNavigator(gridNavigator);
+        searchAlgorithm.ChecksNeighbors(checksNeighbors);
         this.findsTarget.setAlgorithm(searchAlgorithm);
         this.findsTarget.setCreature(this);
         this.findsTarget.setVictim(victim);
@@ -73,12 +73,12 @@ public abstract class Creature extends Entity {
     private boolean checkAdjacentAndEat() {
         Coordinates currentPos = getCoordinates();
 
-        for (Coordinates neighbor : gridNavigator.getNeighbors(currentPos)) {
+        for (Coordinates neighbor : checksNeighbors.getWalkableNeighbors(currentPos)) {
             Entity entity = entityManager.getEntity(neighbor);
             System.out.println("Перевірка їжі в клітинці " + neighbor + ": " + entity);
 
             if (targetClassifier.isFood(entity)) {
-                eatingService.eatVictim(entity);
+                eatingService.eatVictim(this, entity);
                 movementService.moveTo(this, neighbor);
                 System.out.println(typeOfAnimal + " сьел жертву на " + neighbor);
                 return true;
@@ -90,7 +90,7 @@ public abstract class Creature extends Entity {
 
     private boolean pursueAndMaybeEat() {
         Coordinates currentPos = getCoordinates();
-        List<Coordinates> path = findsTarget.getTargetForFood(gridManager, currentPos);
+        List<Coordinates> path = findsTarget.getTargetForFood(mapService, currentPos);
 
         if (path == null || path.isEmpty()) {
             return false;
@@ -102,7 +102,7 @@ public abstract class Creature extends Entity {
             System.out.println("Перевірка їжі в клітинці " + victimCoordinates + ": " + entityAtTarget);
 
             if (targetClassifier.isFood(entityAtTarget)) {
-                eatingService.eatVictim(entityAtTarget);
+                eatingService.eatVictim(this, entityAtTarget);
                 movementService.moveTo(this, victimCoordinates);
                 System.out.println(typeOfAnimal + " сьел жертву на " + victimCoordinates);
                 return true;
@@ -128,7 +128,7 @@ public abstract class Creature extends Entity {
 
                 Coordinates newCoordinates = new Coordinates(newX, newY);
 
-                if (gridManager.getInsideMapBorder(newCoordinates) && gridManager.getSquareEmpty(newCoordinates, entityManager)) {
+                if (mapService.getInsideMapBorder(newCoordinates) && mapService.getSquareEmpty(newCoordinates, entityManager)) {
                     possibleMoves.add(newCoordinates);
                 }
             }

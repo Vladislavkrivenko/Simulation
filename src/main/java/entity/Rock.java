@@ -1,10 +1,10 @@
 package entity;
 
-import animalService.Entity;
-import coordinatesManager.Coordinates;
-import interf.EntityImage;
+import entityService.Entity;
+import coordinatesService.Coordinates;
+import interfacesService.ImageInterface;
 
-public class Rock extends Entity implements EntityImage {
+public class Rock extends Entity implements ImageInterface {
 
 
     public Rock(Coordinates coordinates) {

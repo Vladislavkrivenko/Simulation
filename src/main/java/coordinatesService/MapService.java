@@ -1,12 +1,12 @@
-package coordinatesManager;
+package coordinatesService;
 
-import animalManager.EntityManager;
+import animalService.EntityManager;
 
-public class GridManager {
+public class MapService {
     private final int totalRows;
     private final int totalColumns;
 
-    public GridManager(int totalRows, int totalColumns) {
+    public MapService(int totalRows, int totalColumns) {
         this.totalRows = totalRows;
         this.totalColumns = totalColumns;
 

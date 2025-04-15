@@ -1,17 +1,17 @@
-package mapManager;
+package creationService;
 
-import animalManager.EntityManager;
-import animalManager.EnumObject;
-import animalService.Entity;
+import animalService.EntityManager;
+import animalService.EnumObject;
+import entityService.Entity;
 import animals.Herbivore;
 import animals.Predator;
-import coordinatesManager.Coordinates;
-import coordinatesManager.GridManager;
+import coordinatesService.Coordinates;
+import coordinatesService.MapService;
 import entity.Grass;
 import entity.Rock;
 import entity.Tree;
-import moveAnimal.GridNavigator;
-import moveAnimal.WalkabilityChecker;
+import movingService.ChecksNeighbors;
+import movingService.WalkabilityChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +21,21 @@ import java.util.Set;
 public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
     private final EntityManager entityManager;
-    private final GridManager gridManager;
-    private final GridNavigator gridNavigator;
+    private final MapService mapService;
+    private final ChecksNeighbors checksNeighbors;
 
     public CreateEntityOnMap(int rows, int columns) {
-        this.gridManager = new GridManager(rows, columns);
+        this.mapService = new MapService(rows, columns);
         this.entityManager = new EntityManager();
 
         WalkabilityChecker walkabilityChecker = new WalkabilityChecker(entityManager);
-        this.gridNavigator = new GridNavigator(gridManager, entityManager, walkabilityChecker);
+        this.checksNeighbors = new ChecksNeighbors(mapService, entityManager, walkabilityChecker);
     }
 
 
     public void fillTheMapWithObjects() {
 
-        int totalCells = gridManager.getTotalRows() * gridManager.getTotalColumns();
+        int totalCells = mapService.getTotalRows() * mapService.getTotalColumns();
 
         int countingSpawnObjectsOnTheMap = Math.max(1, (int) Math.ceil((TOTAL_PERCENT_ENTITY / 100.0) * totalCells));
         Set<Coordinates> occupiedCells = entityManager.getOccupiedCells();
@@ -64,9 +64,9 @@ public class CreateEntityOnMap {
             case TREE:
                 return new Tree(coordinates);
             case HERBIVORE:
-                return new Herbivore(coordinates, "Rabbit", 2, entityManager, gridManager, gridNavigator);
+                return new Herbivore(coordinates, "Rabbit", 2, entityManager, mapService, checksNeighbors);
             case PREDATOR:
-                return new Predator(coordinates, "Wolf", 2, entityManager, gridManager, gridNavigator);
+                return new Predator(coordinates, "Wolf", 2, entityManager, mapService, checksNeighbors);
             default:
                 throw new IllegalArgumentException("Unknown entity type" + enumObject);
 
@@ -81,8 +81,8 @@ public class CreateEntityOnMap {
 
         List<Coordinates> emptyCell = new ArrayList<>();
 
-        for (int i = 0; i < gridManager.getTotalRows(); i++) {
-            for (int j = 0; j < gridManager.getTotalColumns(); j++) {
+        for (int i = 0; i < mapService.getTotalRows(); i++) {
+            for (int j = 0; j < mapService.getTotalColumns(); j++) {
                 Coordinates coordinates = new Coordinates(i, j);
 
                 if (!entityManager.getOccupiedCells().contains(coordinates)) {
@@ -99,8 +99,8 @@ public class CreateEntityOnMap {
 
     }
 
-    public GridManager getGridManager() {
-        return gridManager;
+    public MapService getGridManager() {
+        return mapService;
     }
 
     public EntityManager getEntityManager() {
