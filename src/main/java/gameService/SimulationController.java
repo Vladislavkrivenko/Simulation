@@ -1,5 +1,6 @@
 package gameService;
 
+import animalService.EntityManager;
 import animals.Herbivore;
 import creationService.DrawMap;
 import entityService.Creature;
@@ -10,6 +11,15 @@ public class SimulationController {
     private final Object pauseLock = new Object();
     private boolean paused = false;
     private boolean running = true;
+    private List<Creature> animals;
+    private DrawMap drawMap;
+    private EntityManager entityManager;
+
+    public void init(List<Creature> animals, DrawMap drawMap, EntityManager entityManager) {
+        this.animals = animals;
+        this.drawMap = drawMap;
+        this.entityManager = entityManager;
+    }
 
     public void pause() {
         synchronized (pauseLock) {
@@ -32,7 +42,7 @@ public class SimulationController {
         }
     }
 
-    public void runSimulationLoop(List<Creature> animals, DrawMap drawMap) {
+    public void runSimulationLoop() {
         while (running) {
             synchronized (pauseLock) {
                 while (paused) {
@@ -44,7 +54,7 @@ public class SimulationController {
                     }
                 }
             }
-            if (noHerbivoresLeft(animals)) {
+            if (noHerbivoresLeft()) {
                 System.out.println("There are no hares left on the map! The game ends.");
                 stop();
                 break;
@@ -64,7 +74,7 @@ public class SimulationController {
         }
     }
 
-    public void oneIteration(List<Creature> animals, DrawMap drawMap) {
+    public void oneIteration() {
         synchronized (pauseLock) {
             for (Creature creature : animals) {
                 creature.makeMove();
@@ -73,13 +83,8 @@ public class SimulationController {
         }
     }
 
-    private boolean noHerbivoresLeft(List<Creature> animals) {
-        for (Creature creature : animals) {
-            if (creature instanceof Herbivore) {
-                return false;
-            }
-        }
-        return true;
+    private boolean noHerbivoresLeft() {
+        return entityManager.getLocationOfObject().values().stream().noneMatch(e -> e instanceof Herbivore);
     }
 }
 

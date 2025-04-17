@@ -1,6 +1,6 @@
 package animalService;
 
-public enum EnumObject {
+public enum EnumEntity {
     ROCK, GRASS, TREE, HERBIVORE, PREDATOR;
 
 }

@@ -19,10 +19,10 @@ public class UserInput {
             System.out.println(message);
             if (scanner.hasNextInt()) {
                 number = scanner.nextInt();
-                if (number > 0) {
+                if (number >= 4) {
                     return number;
                 } else {
-                    System.out.println("the number must not be lower than 0");
+                    System.out.println("the number must not be lower than 4");
                 }
             } else {
                 System.out.println("This is not number");

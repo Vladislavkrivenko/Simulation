@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public class EntityManager {
     private final Map<Coordinates, Entity> locationOfObject = new HashMap<>();
     private final Set<Coordinates> occupiedCells = new HashSet<>();

@@ -1,5 +1,6 @@
 package gameService;
 
+import actionsService.*;
 import animalService.EntityManager;
 import coordinatesService.Coordinates;
 import coordinatesService.MapService;
@@ -22,9 +23,12 @@ public class GameMenu {
 
     private final Scanner scanner = new Scanner(System.in);
     private final SimulationController simulationController = new SimulationController();
+    private Actions actions;
     private final UserInput userInput = new UserInput();
+
     private List<Creature> animal;
     private DrawMap drawMap;
+
     private boolean gameStarted = false;
 
     public void startGame() {
@@ -32,7 +36,6 @@ public class GameMenu {
             startGameLoop();
         }
     }
-
 
     private void startGameLoop() {
         int choice = userInput.getGameMenu();
@@ -46,7 +49,7 @@ public class GameMenu {
                 break;
             case PAUSE:
                 if (gameStarted) {
-                    simulationController.pause();
+                    actions.pauseGame();
                     System.out.println("The game is paused!");
                 } else {
                     System.out.println("First, launch the game.");
@@ -54,7 +57,7 @@ public class GameMenu {
                 break;
             case RESUME:
                 if (gameStarted) {
-                    simulationController.resume();
+                    actions.resumeGame();
                     System.out.println("Game resume!");
                 } else {
                     System.out.println("First, launch the game.");
@@ -64,7 +67,7 @@ public class GameMenu {
                 if (gameStarted) {
                     System.out.println("One simulation step:");
                     if (animal != null && drawMap != null) {
-                        simulationController.oneIteration(animal, drawMap);
+                        actions.oneIteration();
                     }
                 } else {
                     System.out.println("First, launch the game.");
@@ -72,7 +75,7 @@ public class GameMenu {
                 break;
             case STOP_GAME:
                 if (gameStarted) {
-                    simulationController.stop();
+                    actions.stopGame();
                     System.out.println("Game stopped.");
                     gameStarted = false;
                 } else {
@@ -80,23 +83,25 @@ public class GameMenu {
                 }
                 break;
             default:
-                System.out.println("Unknown team.");
+                System.out.println("Unknown command.");
 
         }
     }
 
     private void game() {
         System.out.println("The game has begun!");
+
         int width = userInput.getInputNumbersFromUser("Enter the map width:");
         int height = userInput.getInputNumbersFromUser("Enter the height of the map:");
+
         CreateEntityOnMap game = new CreateEntityOnMap(width, height);
         game.fillTheMapWithObjects();
 
         MapService mapService = game.getGridManager();
         EntityManager entityManager = game.getEntityManager();
+
         drawMap = new DrawMap(mapService, entityManager);
         animal = new ArrayList<>();
-
 
         for (Map.Entry<Coordinates, Entity> entry : game.getEntityManager().getLocationOfObject().entrySet()) {
             if (entry.getValue() instanceof Creature) {
@@ -106,7 +111,17 @@ public class GameMenu {
         }
         drawMap.drawingMap();
 
-        Thread simulationThread = new Thread(() -> simulationController.runSimulationLoop(animal, drawMap));
+        simulationController.init(animal, drawMap, entityManager);
+
+        Action start = new ActionStartGame(simulationController);
+        Action pause = new ActionPause(simulationController);
+        Action resume = new ActionResume(simulationController);
+        Action iteration = new ActionOneIteration(simulationController);
+        Action stop = new ActionStop(simulationController);
+
+        actions = new Actions(start, pause, resume, iteration, stop);
+
+        Thread simulationThread = new Thread(() -> actions.startGame());
         simulationThread.start();
         gameStarted = true;
     }

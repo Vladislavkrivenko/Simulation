@@ -48,7 +48,6 @@ public class SearchAlgorithm {
             Entity currentEntity = entityManager.getEntity(current);
             if (victimClass != null && victimClass.isInstance(currentEntity)) {
                 targetCoordinates = current;
-                System.out.println("Їжа знайдена в " + targetCoordinates);
                 break;
             }
 

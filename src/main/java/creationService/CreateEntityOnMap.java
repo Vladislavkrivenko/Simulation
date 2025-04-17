@@ -1,7 +1,7 @@
 package creationService;
 
 import animalService.EntityManager;
-import animalService.EnumObject;
+import animalService.EnumEntity;
 import entityService.Entity;
 import animals.Herbivore;
 import animals.Predator;
@@ -40,7 +40,7 @@ public class CreateEntityOnMap {
         int countingSpawnObjectsOnTheMap = Math.max(1, (int) Math.ceil((TOTAL_PERCENT_ENTITY / 100.0) * totalCells));
         Set<Coordinates> occupiedCells = entityManager.getOccupiedCells();
 
-        for (EnumObject enumObject : EnumObject.values()) {
+        for (EnumEntity enumEntity : EnumEntity.values()) {
             int count = 0;
             while (count < countingSpawnObjectsOnTheMap) {
                 Coordinates randomCell = getRandomCell();
@@ -49,14 +49,14 @@ public class CreateEntityOnMap {
                     continue;
                 }
 
-                entityManager.setEntity(randomCell, createEntity(enumObject, randomCell));
+                entityManager.setEntity(randomCell, createEntity(enumEntity, randomCell));
                 count++;
             }
         }
     }
 
-    private Entity createEntity(EnumObject enumObject, Coordinates coordinates) {
-        switch (enumObject) {
+    private Entity createEntity(EnumEntity enumEntity, Coordinates coordinates) {
+        switch (enumEntity) {
             case ROCK:
                 return new Rock(coordinates);
             case GRASS:
@@ -68,7 +68,7 @@ public class CreateEntityOnMap {
             case PREDATOR:
                 return new Predator(coordinates, "Wolf", 2, entityManager, mapService, checksNeighbors);
             default:
-                throw new IllegalArgumentException("Unknown entity type" + enumObject);
+                throw new IllegalArgumentException("Unknown entity type" + enumEntity);
 
         }
 
