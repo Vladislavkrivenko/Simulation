@@ -17,6 +17,5 @@ public class MovementService {
 
         creature.setPosition(newPosition);
         entityManager.setEntity(newPosition, creature);
-        System.out.println("Ходим из " + oldPosition + " на " + newPosition);
     }
 }

@@ -33,7 +33,6 @@ public class EntityManager {
     public void removeObject(Coordinates coordinates, Entity entity) {
         if (locationOfObject.containsKey(coordinates) && locationOfObject.get(coordinates).equals(entity)) {
             locationOfObject.remove(coordinates);
-            System.out.println(" объект удален " + entity.getClass().getSimpleName() + " с " + coordinates);
         }
     }
 

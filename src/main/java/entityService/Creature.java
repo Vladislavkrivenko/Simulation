@@ -52,7 +52,6 @@ public abstract class Creature extends Entity {
 
     public void makeMove() {
         if (victim == null) {
-            System.out.println("Жертва не найдена для " + this.typeOfAnimal);
             return;
         }
 
@@ -65,8 +64,6 @@ public abstract class Creature extends Entity {
         if (pursueAndMaybeEat()) {
             return;
         }
-
-        System.out.println(typeOfAnimal + " не нашел еду.");
         moveRandomly();
     }
 
@@ -75,12 +72,10 @@ public abstract class Creature extends Entity {
 
         for (Coordinates neighbor : checksNeighbors.getWalkableNeighbors(currentPos)) {
             Entity entity = entityManager.getEntity(neighbor);
-            System.out.println("Перевірка їжі в клітинці " + neighbor + ": " + entity);
 
             if (targetClassifier.isFood(entity)) {
                 eatingService.eatVictim(this, entity);
                 movementService.moveTo(this, neighbor);
-                System.out.println(typeOfAnimal + " сьел жертву на " + neighbor);
                 return true;
             }
         }
@@ -99,12 +94,10 @@ public abstract class Creature extends Entity {
         if (path.size() == 2) {
             Coordinates victimCoordinates = path.get(1);
             Entity entityAtTarget = entityManager.getEntity(victimCoordinates);
-            System.out.println("Перевірка їжі в клітинці " + victimCoordinates + ": " + entityAtTarget);
 
             if (targetClassifier.isFood(entityAtTarget)) {
                 eatingService.eatVictim(this, entityAtTarget);
                 movementService.moveTo(this, victimCoordinates);
-                System.out.println(typeOfAnimal + " сьел жертву на " + victimCoordinates);
                 return true;
             }
         }
@@ -150,10 +143,6 @@ public abstract class Creature extends Entity {
         }
         super.setCoordinates(newPosition);
 
-    }
-
-    public FindsTarget getFindsTarget() {
-        return findsTarget;
     }
 
 }

@@ -6,7 +6,7 @@ import interfacesService.ImageInterface;
 
 
 public class Grass extends Entity implements ImageInterface {
-    public Grass(Coordinates coordinates, int health) {
+    public Grass(Coordinates coordinates) {
         super(coordinates);
     }
 

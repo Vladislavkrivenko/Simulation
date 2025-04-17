@@ -60,7 +60,7 @@ public class CreateEntityOnMap {
             case ROCK:
                 return new Rock(coordinates);
             case GRASS:
-                return new Grass(coordinates, 100);
+                return new Grass(coordinates);
             case TREE:
                 return new Tree(coordinates);
             case HERBIVORE:
