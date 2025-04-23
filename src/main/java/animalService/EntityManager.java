@@ -9,29 +9,41 @@ import java.util.Map;
 import java.util.Set;
 
 public class EntityManager {
-    private final Map<Coordinates, Entity> locationOfObject = new HashMap<>();
+    private final Map<Coordinates, Entity> locationOfEntity = new HashMap<>();
     private final Set<Coordinates> occupiedCells = new HashSet<>();
 
     public EntityManager() {
         super();
     }
 
-    public void setEntity(Coordinates coordinates, Entity entity) {
+    public void installEntity(Coordinates coordinates, Entity entity) {
+        setEntity(coordinates, entity);
+    }
+
+    private void setEntity(Coordinates coordinates, Entity entity) {
         entity.setCoordinates(coordinates);
-        locationOfObject.put(coordinates, entity);
+        locationOfEntity.put(coordinates, entity);
         occupiedCells.add(coordinates);
     }
 
     public Entity getEntity(Coordinates coordinates) {
+        return returningEntity(coordinates);
+    }
+
+    private Entity returningEntity(Coordinates coordinates) {
         if (coordinates == null) {
             System.out.println("Entity null");
         }
-        return locationOfObject.get(coordinates);
+        return locationOfEntity.get(coordinates);
     }
 
-    public void removeObject(Coordinates coordinates, Entity entity) {
-        if (locationOfObject.containsKey(coordinates) && locationOfObject.get(coordinates).equals(entity)) {
-            locationOfObject.remove(coordinates);
+    public void removeEntity(Coordinates coordinates, Entity entity) {
+        deletingEntity(coordinates, entity);
+    }
+
+    private void deletingEntity(Coordinates coordinates, Entity entity) {
+        if (locationOfEntity.containsKey(coordinates) && locationOfEntity.get(coordinates).equals(entity)) {
+            locationOfEntity.remove(coordinates);
         }
     }
 
@@ -39,8 +51,8 @@ public class EntityManager {
         return occupiedCells;
     }
 
-    public Map<Coordinates, Entity> getLocationOfObject() {
-        return locationOfObject;
+    public Map<Coordinates, Entity> getLocationOfEntity() {
+        return locationOfEntity;
     }
 
 }

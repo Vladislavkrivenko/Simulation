@@ -63,7 +63,7 @@ public class SimulationController {
             for (Creature creature : animals) {
                 creature.makeMove();
             }
-            drawMap.drawingMap();
+            drawMap.getDrawingMap();
 
             try {
                 Thread.sleep(1000);
@@ -79,12 +79,12 @@ public class SimulationController {
             for (Creature creature : animals) {
                 creature.makeMove();
             }
-            drawMap.drawingMap();
+            drawMap.getDrawingMap();
         }
     }
 
     private boolean noHerbivoresLeft() {
-        return entityManager.getLocationOfObject().values().stream().noneMatch(e -> e instanceof Herbivore);
+        return entityManager.getLocationOfEntity().values().stream().noneMatch(e -> e instanceof Herbivore);
     }
 }
 

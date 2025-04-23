@@ -16,7 +16,11 @@ public class EatingService {
         this.coordinateUtils = new CoordinateUtils();
     }
 
-    public void eatVictim(Entity predator, Entity target) {
+    public void eatingFood(Entity predator, Entity target) {
+        eatVictim(predator, target);
+    }
+
+    private void eatVictim(Entity predator, Entity target) {
         if (target == null) {
             return;
         }
@@ -29,7 +33,7 @@ public class EatingService {
         }
 
         Coordinates victimPosition = target.getCoordinates();
-        entityManager.removeObject(victimPosition, target);
+        entityManager.removeEntity(victimPosition, target);
 
     }
 

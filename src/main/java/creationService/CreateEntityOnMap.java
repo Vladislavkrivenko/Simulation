@@ -32,8 +32,11 @@ public class CreateEntityOnMap {
         this.checksNeighbors = new ChecksNeighbors(mapService, entityManager, walkabilityChecker);
     }
 
+    public void getFillTheMapWithEntity() {
+        fillTheMapWithEntity();
+    }
 
-    public void fillTheMapWithObjects() {
+    private void fillTheMapWithEntity() {
 
         int totalCells = mapService.getTotalRows() * mapService.getTotalColumns();
 
@@ -49,7 +52,7 @@ public class CreateEntityOnMap {
                     continue;
                 }
 
-                entityManager.setEntity(randomCell, createEntity(enumEntity, randomCell));
+                entityManager.installEntity(randomCell, createEntity(enumEntity, randomCell));
                 count++;
             }
         }
@@ -74,8 +77,7 @@ public class CreateEntityOnMap {
 
     }
 
-
-    public Coordinates getRandomCell() {
+    private Coordinates getRandomCell() {
 
         Random random = new Random();
 

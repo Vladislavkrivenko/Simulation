@@ -11,11 +11,15 @@ public class MovementService {
 
     }
 
-    public void moveTo(Creature creature, Coordinates newPosition) {
+    public void moveTo(Creature creature, Coordinates position) {
+        move(creature, position);
+    }
+
+    private void move(Creature creature, Coordinates newPosition) {
         Coordinates oldPosition = creature.getCoordinates();
-        entityManager.removeObject(oldPosition, creature);
+        entityManager.removeEntity(oldPosition, creature);
 
         creature.setPosition(newPosition);
-        entityManager.setEntity(newPosition, creature);
+        entityManager.installEntity(newPosition, creature);
     }
 }

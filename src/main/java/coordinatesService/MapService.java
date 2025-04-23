@@ -34,7 +34,7 @@ public class MapService {
     }
 
     private boolean isSquareEmpty(Coordinates coordinates, EntityManager entityManager) {
-        return !entityManager.getLocationOfObject().containsKey(coordinates);
+        return !entityManager.getLocationOfEntity().containsKey(coordinates);
     }
 
 }

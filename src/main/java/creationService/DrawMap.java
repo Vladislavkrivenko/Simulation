@@ -19,7 +19,11 @@ public class DrawMap {
         this.entityManager = entityManager;
     }
 
-    public void drawingMap() {
+    public void getDrawingMap() {
+        drawingMap();
+    }
+
+    private void drawingMap() {
         for (int colum = 0; colum < mapService.getTotalColumns(); colum++) {
             StringBuilder line = new StringBuilder();
             for (int rows = 0; rows < mapService.getTotalRows(); rows++) {

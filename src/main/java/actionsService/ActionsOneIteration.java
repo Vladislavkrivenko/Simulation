@@ -2,10 +2,10 @@ package actionsService;
 
 import gameService.SimulationController;
 
-public class ActionOneIteration implements Action {
+public class ActionsOneIteration implements Action {
     private final SimulationController simulationController;
 
-    public ActionOneIteration(SimulationController simulationController) {
+    public ActionsOneIteration(SimulationController simulationController) {
         this.simulationController = simulationController;
     }
 

@@ -12,7 +12,6 @@ import entityService.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class GameMenu {
     private static final int START_GAME = 1;
@@ -21,7 +20,6 @@ public class GameMenu {
     private static final int ITERATE = 4;
     private static final int STOP_GAME = 5;
 
-    private final Scanner scanner = new Scanner(System.in);
     private final SimulationController simulationController = new SimulationController();
     private Actions actions;
     private final UserInput userInput = new UserInput();
@@ -95,7 +93,7 @@ public class GameMenu {
         int height = userInput.getInputNumbersFromUser("Enter the height of the map:");
 
         CreateEntityOnMap game = new CreateEntityOnMap(width, height);
-        game.fillTheMapWithObjects();
+        game.getFillTheMapWithEntity();
 
         MapService mapService = game.getGridManager();
         EntityManager entityManager = game.getEntityManager();
@@ -103,20 +101,20 @@ public class GameMenu {
         drawMap = new DrawMap(mapService, entityManager);
         animal = new ArrayList<>();
 
-        for (Map.Entry<Coordinates, Entity> entry : game.getEntityManager().getLocationOfObject().entrySet()) {
+        for (Map.Entry<Coordinates, Entity> entry : game.getEntityManager().getLocationOfEntity().entrySet()) {
             if (entry.getValue() instanceof Creature) {
                 Creature creature = (Creature) entry.getValue();
                 animal.add(creature);
             }
         }
-        drawMap.drawingMap();
+        drawMap.getDrawingMap();
 
         simulationController.init(animal, drawMap, entityManager);
 
         Action start = new ActionStartGame(simulationController);
         Action pause = new ActionPause(simulationController);
         Action resume = new ActionResume(simulationController);
-        Action iteration = new ActionOneIteration(simulationController);
+        Action iteration = new ActionsOneIteration(simulationController);
         Action stop = new ActionStop(simulationController);
 
         actions = new Actions(start, pause, resume, iteration, stop);

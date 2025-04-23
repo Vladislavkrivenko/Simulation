@@ -74,7 +74,7 @@ public abstract class Creature extends Entity {
             Entity entity = entityManager.getEntity(neighbor);
 
             if (targetClassifier.isFood(entity)) {
-                eatingService.eatVictim(this, entity);
+                eatingService.eatingFood(this, entity);
                 movementService.moveTo(this, neighbor);
                 return true;
             }
@@ -96,7 +96,7 @@ public abstract class Creature extends Entity {
             Entity entityAtTarget = entityManager.getEntity(victimCoordinates);
 
             if (targetClassifier.isFood(entityAtTarget)) {
-                eatingService.eatVictim(this, entityAtTarget);
+                eatingService.eatingFood(this, entityAtTarget);
                 movementService.moveTo(this, victimCoordinates);
                 return true;
             }
